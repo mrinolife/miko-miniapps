@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Sushi Tap Picker</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --bg: #fff7ef;
+      --card: #fffdf9;
+      --line: #ead8c4;
+      --text: #241a14;
+      --muted: #77695f;
+      --accent: #ff7a59;
+      --accent2: #38b2ac;
+      --good: #0f9f6f;
+      --shadow: 0 12px 28px rgba(72, 40, 16, .12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #fff9f2, #fff1e4 42%, #f8ecdf);
+    }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 14px 12px 32px; }
+    .hero, .section, .summary {
+      background: rgba(255,253,249,.96);
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+    }
+    .hero { padding: 16px; margin-bottom: 14px; position: sticky; top: 8px; z-index: 3; }
+    h1 { margin: 0; font-size: 1.4rem; }
+    .sub { margin-top: 6px; color: var(--muted); }
+    .topbar { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; margin-top: 14px; }
+    input, textarea, button {
+      font: inherit; border-radius: 16px;
+    }
+    input, textarea {
+      width: 100%; padding: 14px; border: 1px solid var(--line); background: white; color: var(--text);
+    }
+    button {
+      border: 0; padding: 14px 16px; font-weight: 800; color: white; cursor: pointer;
+    }
+    .copy { background: linear-gradient(135deg, var(--good), var(--accent2)); }
+    .reset { background: linear-gradient(135deg, #ff6b6b, #ff9f68); }
+    .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .chip { border: 1px solid var(--line); background: white; color: var(--muted); border-radius: 999px; padding: 7px 10px; font-size: .84rem; }
+    .section { padding: 14px; margin-top: 14px; }
+    .section h2 { margin: 0 0 4px; font-size: 1.02rem; }
+    .section p { margin: 0 0 12px; color: var(--muted); font-size: .9rem; }
+    .cards { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+    .card {
+      border: 1px solid var(--line); border-radius: 22px; overflow: hidden; background: white;
+      display: flex; flex-direction: column;
+    }
+    .img {
+      height: 112px; display: flex; align-items: center; justify-content: center;
+      font-size: 52px; background: linear-gradient(135deg, #ffe6cf, #fff7ed);
+    }
+    .body { padding: 10px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .name { font-size: .94rem; font-weight: 800; line-height: 1.2; }
+    .meta { color: var(--muted); font-size: .78rem; min-height: 32px; }
+    .qty { display: grid; grid-template-columns: 44px 1fr 44px; gap: 8px; align-items: center; margin-top: auto; }
+    .qty button {
+      height: 44px; padding: 0; border-radius: 14px; color: var(--text); border: 1px solid var(--line);
+      background: #fff6ef; font-size: 1.25rem; font-weight: 900;
+    }
+    .qty .plus { background: #effcf5; color: var(--good); }
+    .count { text-align: center; font-size: 1.15rem; font-weight: 900; }
+    .summary { margin-top: 14px; padding: 14px; }
+    .stats { display: grid; gap: 10px; grid-template-columns: repeat(4, 1fr); margin-bottom: 12px; }
+    .stat { background: white; border: 1px solid var(--line); border-radius: 18px; padding: 12px; }
+    .label { color: var(--muted); font-size: .78rem; }
+    .stat b { display: block; margin-top: 4px; font-size: 1.1rem; }
+    textarea { min-height: 210px; }
+    .notes { margin-top: 10px; min-height: 96px; }
+    .footer { margin-top: 8px; color: var(--muted); font-size: .85rem; }
+    @media (max-width: 760px) {
+      .hero { position: static; }
+      .topbar { grid-template-columns: 1fr 1fr; }
+      .topbar input { grid-column: 1 / -1; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .cards { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>🍣 Sushi Tap Picker</h1>
+      <div class="sub">Tap + once for one plate or one order. Nigiri shows up later as ~2 pieces per plate.</div>
+      <div class="topbar">
+        <input id="place" placeholder="Place name: Kura, AYCE, etc.">
+        <button class="copy" id="sendBtn" type="button">Send to Miko</button>
+        <button class="reset" id="resetBtn" type="button">Reset</button>
+      </div>
+      <div class="chips">
+        <div class="chip">easy phone taps</div>
+        <div class="chip">1 tap = 1 order</div>
+        <div class="chip">done sends straight to chat</div>
+        <a class="chip" href="/workout/" style="text-decoration:none">Workout mode</a>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Fish nigiri</h2>
+      <p>Each + = one plate.</p>
+      <div class="cards">
+        <div class="card" data-name="Salmon" data-kind="pieces"><div class="img">🍣</div><div class="body"><div class="name">Salmon</div><div class="meta">1 plate • usually 2 pieces</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+        <div class="card" data-name="Seared salmon" data-kind="pieces"><div class="img">🔥🍣</div><div class="body"><div class="name">Seared salmon</div><div class="meta">1 plate • usually 2 pieces</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+        <div class="card" data-name="Salmon belly" data-kind="pieces"><div class="img">✨🐟</div><div class="body"><div class="name">Salmon belly</div><div class="meta">1 plate • usually 2 pieces</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+        <div class="card" data-name="Tuna" data-kind="pieces"><div class="img">🐟</div><div class="body"><div class="name">Tuna</div><div class="meta">1 plate • usually 2 pieces</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+        <div class="card" data-name="Fatty tuna" data-kind="pieces"><div class="img">💎🐟</div><div class="body"><div class="name">Fatty tuna</div><div class="meta">1 plate • usually 2 pieces</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+        <div class="card" data-name="Yellowtail" data-kind="pieces"><div class="img">🌊🐟</div><div class="body"><div class="name">Yellowtail</div><div class="meta">1 plate • usually 2 pieces</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Shellfish + other plates</h2>
+      <p>Each + = one plate.</p>
+      <div class="cards">
+        <div class="card" data-name="Shrimp / ebi" data-kind="pieces"><div class="img">🦐</div><div class="body"><div class="name">Shrimp / ebi</div><div class="meta">1 plate • usually 2 pieces</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+        <div class="card" data-name="Scallop" data-kind="pieces"><div class="img">🦪</div><div class="body"><div class="name">Scallop</div><div class="meta">1 plate • usually 2 pieces</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+        <div class="card" data-name="Bay scallop mayo" data-kind="pieces"><div class="img">🦪🥚</div><div class="body"><div class="name">Bay scallop mayo</div><div class="meta">1 plate • usually 2 pieces</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+        <div class="card" data-name="Crab stick / kani" data-kind="pieces"><div class="img">🦀</div><div class="body"><div class="name">Crab stick / kani</div><div class="meta">1 plate • usually 2 pieces</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+        <div class="card" data-name="Tamago" data-kind="pieces"><div class="img">🥚</div><div class="body"><div class="name">Tamago</div><div class="meta">1 plate • usually 2 pieces</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+        <div class="card" data-name="Inari" data-kind="pieces"><div class="img">🟫</div><div class="body"><div class="name">Inari</div><div class="meta">1 plate • usually 2 pieces</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Rolls</h2>
+      <p>Each + = one plate/order.</p>
+      <div class="cards">
+        <div class="card" data-name="California roll" data-kind="rolls"><div class="img">🥑</div><div class="body"><div class="name">California roll</div><div class="meta">1 roll plate</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+        <div class="card" data-name="Spicy tuna roll" data-kind="rolls"><div class="img">🌶️🐟</div><div class="body"><div class="name">Spicy tuna roll</div><div class="meta">1 roll plate</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+        <div class="card" data-name="Salmon roll" data-kind="rolls"><div class="img">🍣🎯</div><div class="body"><div class="name">Salmon roll</div><div class="meta">1 roll plate</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+        <div class="card" data-name="Shrimp tempura roll" data-kind="rolls"><div class="img">🍤</div><div class="body"><div class="name">Shrimp tempura roll</div><div class="meta">1 roll plate</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+        <div class="card" data-name="Rainbow roll" data-kind="rolls"><div class="img">🌈</div><div class="body"><div class="name">Rainbow roll</div><div class="meta">1 roll plate</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+        <div class="card" data-name="Dragon roll" data-kind="rolls"><div class="img">🐉</div><div class="body"><div class="name">Dragon roll</div><div class="meta">1 roll plate</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Sides + drinks + dessert</h2>
+      <p>Each + = one order/drink.</p>
+      <div class="cards">
+        <div class="card" data-name="Takoyaki" data-kind="orders"><div class="img">🐙🔥</div><div class="body"><div class="name">Takoyaki</div><div class="meta">1 order</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+        <div class="card" data-name="Karaage" data-kind="orders"><div class="img">🍗</div><div class="body"><div class="name">Karaage</div><div class="meta">1 order</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+        <div class="card" data-name="Gyoza" data-kind="orders"><div class="img">🥟</div><div class="body"><div class="name">Gyoza</div><div class="meta">1 order</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+        <div class="card" data-name="Edamame" data-kind="orders"><div class="img">🫛</div><div class="body"><div class="name">Edamame</div><div class="meta">1 order</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+        <div class="card" data-name="Milk tea / boba" data-kind="addons"><div class="img">🧋</div><div class="body"><div class="name">Milk tea / boba</div><div class="meta">1 drink</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+        <div class="card" data-name="ICEE / slush" data-kind="addons"><div class="img">❄️🥤</div><div class="body"><div class="name">ICEE / slush</div><div class="meta">1 drink</div><div class="qty"><button class="minus" type="button">−</button><div class="count">0</div><button class="plus" type="button">+</button></div></div></div>
+      </div>
+    </div>
+
+    <div class="summary">
+      <div class="stats">
+        <div class="stat"><div class="label">Unique items</div><b id="uniqueCount">0</b></div>
+        <div class="stat"><div class="label">Estimated sushi pieces</div><b id="pieceCount">0</b></div>
+        <div class="stat"><div class="label">Roll / side orders</div><b id="orderCount">0</b></div>
+        <div class="stat"><div class="label">Drink / dessert add-ons</div><b id="addonCount">0</b></div>
+      </div>
+      <textarea id="summaryText"></textarea>
+      <textarea id="notes" class="notes" placeholder="Anything missing? Dump it here messy."></textarea>
+      <div class="footer">Tap Send to Miko when you're done. Outside Telegram it falls back to copy.</div>
+    </div>
+  </div>
+
+  <script>
+    const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+    const STORAGE_KEY = 'miko-sushi-picker-state';
+
+    if (tg) {
+      tg.ready();
+      tg.expand();
+      tg.MainButton.setText('Send to Miko');
+      tg.MainButton.onClick(sendToMiko);
+      tg.MainButton.show();
+    }
+
+    function cards() {
+      return Array.from(document.querySelectorAll('.card'));
+    }
+
+    function loadState() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      } catch {
+        return {};
+      }
+    }
+
+    function saveState() {
+      const counts = {};
+      cards().forEach((card) => {
+        counts[card.dataset.name] = Number(card.querySelector('.count').textContent || '0');
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        place: document.getElementById('place').value || '',
+        notes: document.getElementById('notes').value || '',
+        counts,
+      }));
+    }
+
+    function restoreState() {
+      const state = loadState();
+      document.getElementById('place').value = state.place || '';
+      document.getElementById('notes').value = state.notes || '';
+      cards().forEach((card) => {
+        const qty = state.counts && Number.isFinite(Number(state.counts[card.dataset.name]))
+          ? Number(state.counts[card.dataset.name])
+          : 0;
+        card.querySelector('.count').textContent = String(qty);
+      });
+    }
+
+    function buildPayload() {
+      let unique = 0, pieces = 0, orders = 0, addons = 0;
+      const place = (document.getElementById('place').value || '').trim();
+      const items = [];
+      const lines = [(place || 'Sushi') + ' breakdown'];
+      cards().forEach((card) => {
+        const qty = Number(card.querySelector('.count').textContent || '0');
+        if (!qty) return;
+        unique += 1;
+        const name = card.dataset.name;
+        const kind = card.dataset.kind;
+        if (kind === 'pieces') pieces += qty * 2;
+        if (kind === 'rolls' || kind === 'orders') orders += qty;
+        if (kind === 'addons') addons += qty;
+        items.push({ name, kind, qty });
+        lines.push(name + ': ' + qty + ' order(s)');
+      });
+      const notes = (document.getElementById('notes').value || '').trim();
+      if (notes) lines.push('\nNotes: ' + notes);
+      lines.push('\nQuick counts: ' + unique + ' unique items, ~' + pieces + ' sushi pieces, ' + orders + ' roll/side orders, ' + addons + ' drink/dessert add-ons.');
+      lines.push('\nPlease estimate macros from this.');
+      return {
+        type: 'sushi_picker',
+        place,
+        notes,
+        items,
+        counts: { unique, pieces, orders, addons },
+        summary: lines.join('\n'),
+      };
+    }
+
+    function updateSummary() {
+      const payload = buildPayload();
+      document.getElementById('uniqueCount').textContent = String(payload.counts.unique);
+      document.getElementById('pieceCount').textContent = String(payload.counts.pieces);
+      document.getElementById('orderCount').textContent = String(payload.counts.orders);
+      document.getElementById('addonCount').textContent = String(payload.counts.addons);
+      document.getElementById('summaryText').value = payload.summary;
+      saveState();
+    }
+
+    async function sendToMiko() {
+      const payload = buildPayload();
+      if (tg) {
+        tg.sendData(JSON.stringify(payload));
+        tg.close();
+        return;
+      }
+      await navigator.clipboard.writeText(payload.summary);
+      const btn = document.getElementById('sendBtn');
+      const old = btn.textContent;
+      btn.textContent = 'Copied';
+      setTimeout(() => btn.textContent = old, 1200);
+    }
+
+    function bump(btn, delta) {
+      const card = btn.closest('.card');
+      const countEl = card.querySelector('.count');
+      const next = Math.max(0, Number(countEl.textContent || '0') + delta);
+      countEl.textContent = String(next);
+      updateSummary();
+    }
+
+    document.querySelectorAll('.plus').forEach((btn) => btn.addEventListener('click', () => bump(btn, 1)));
+    document.querySelectorAll('.minus').forEach((btn) => btn.addEventListener('click', () => bump(btn, -1)));
+    document.getElementById('place').addEventListener('input', updateSummary);
+    document.getElementById('notes').addEventListener('input', updateSummary);
+    document.getElementById('sendBtn').addEventListener('click', sendToMiko);
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      document.querySelectorAll('.count').forEach((el) => el.textContent = '0');
+      document.getElementById('place').value = '';
+      document.getElementById('notes').value = '';
+      localStorage.removeItem(STORAGE_KEY);
+      updateSummary();
+    });
+
+    restoreState();
+    updateSummary();
+  </script>
+</body>
+</html>
