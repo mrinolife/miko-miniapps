@@ -7,25 +7,36 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root{
-      --bg:#120f1b;
-      --panel:#1b1726;
-      --card:#241f33;
-      --line:#3a3152;
-      --text:#f6f1ff;
-      --muted:#b8adc8;
-      --accent:#8b5cf6;
-      --accent2:#22c55e;
-      --accent3:#f59e0b;
-      --danger:#fb7185;
-      --shadow:0 14px 34px rgba(0,0,0,.28);
+      --bg:#0b0a10;
+      --bg2:#14111b;
+      --panel:#17131f;
+      --panel2:#211a2b;
+      --card:#241b31;
+      --line:#3b2e48;
+      --line-strong:#7c5c54;
+      --text:#f5f1ea;
+      --muted:#c7b8bf;
+      --ember:#d96b4f;
+      --wisteria:#7a5fd0;
+      --cyan:#6fb7d6;
+      --gold:#c7a96a;
+      --crimson:#8d3140;
     }
     *{box-sizing:border-box}
-    body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(180deg,#151120,#100d18 44%,#0d0a13);color:var(--text)}
-    .shell{max-width:760px;margin:0 auto;padding:16px 14px 34px}
-    .hero,.panel{background:rgba(27,23,38,.96);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow)}
-    .hero{padding:18px 16px}
-    .eyebrow{font:800 12px/1.2 ui-monospace,monospace;color:#c4b5fd;text-transform:uppercase;letter-spacing:.12em}
-    h1{margin:8px 0 6px;font-size:1.8rem;line-height:1}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:
+      radial-gradient(circle at top, rgba(122,95,208,.22), transparent 24%),
+      radial-gradient(circle at 82% 14%, rgba(217,107,79,.18), transparent 18%),
+      linear-gradient(180deg,var(--bg2),var(--bg) 46%,#08070d);
+      color:var(--text)}
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.2;background:
+      linear-gradient(120deg, transparent 0 46%, rgba(111,183,214,.04) 46% 47%, transparent 47% 100%),
+      repeating-linear-gradient(135deg, rgba(199,169,106,.03) 0 2px, transparent 2px 18px)}
+    .shell{max-width:760px;margin:0 auto;padding:16px 14px 34px;position:relative}
+    .hero,.panel{background:linear-gradient(180deg,rgba(29,22,39,.96),rgba(20,16,27,.96));border:1px solid var(--line);border-radius:24px;box-shadow:none;position:relative;overflow:hidden}
+    .hero::after,.panel::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.025),transparent 30%)}
+    .hero{padding:18px 16px;border-color:var(--line-strong)}
+    .eyebrow{font:800 12px/1.2 ui-monospace,monospace;color:var(--gold);text-transform:uppercase;letter-spacing:.12em}
+    h1{margin:8px 0 6px;font-size:1.9rem;line-height:1;color:#fff5ea}
     .sub{color:var(--muted);line-height:1.45}
     .stack{display:grid;gap:14px;margin-top:14px}
     .panel{padding:14px}
@@ -34,11 +45,17 @@
     .section-note{font-size:.86rem;color:var(--muted)}
     .chips,.row{display:flex;gap:8px;flex-wrap:wrap}
     .chip,.choice,.mini,.ghost,.send,.navbtn{border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--text)}
-    .chip{padding:8px 10px;font-size:.84rem;color:var(--muted)}
+    .chip{padding:8px 10px;font-size:.84rem;color:var(--muted);background:rgba(31,23,40,.86)}
+    .sigil{display:grid;grid-template-columns:repeat(3,10px);gap:5px;align-content:start}
+    .sigil span{display:block;width:10px;height:10px;border-radius:999px;background:linear-gradient(180deg,var(--gold),var(--ember));opacity:.9}
+    .hero-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+    .progress-band{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:14px}
+    .progress-band span{height:4px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(199,169,106,.12)}
+    .progress-band span:nth-child(1){background:linear-gradient(90deg,var(--ember),var(--gold))}
     .choice{min-height:54px;padding:12px 14px;font-weight:700;font-size:1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:1;min-width:0}
-    .choice.active{background:linear-gradient(180deg,#8b5cf6,#7c3aed);border-color:#9f7aea;color:#fff}
-    .choice.soft.active{background:linear-gradient(180deg,#22c55e,#16a34a);border-color:#4ade80}
-    .choice.warn.active{background:linear-gradient(180deg,#f59e0b,#d97706);border-color:#fbbf24;color:#261700}
+    .choice.active{background:linear-gradient(180deg,var(--wisteria),#5f48ae);border-color:#a08ae6;color:#fff}
+    .choice.soft.active{background:linear-gradient(180deg,var(--cyan),#4a8cb0);border-color:#9ed6ec;color:#0c1418}
+    .choice.warn.active{background:linear-gradient(180deg,var(--ember),#b85340);border-color:#ebb195;color:#fff7f1}
     .scale{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
     .scale .choice{padding:10px 6px;min-height:60px;flex-direction:column;gap:4px}
     .scale-num{font-size:1.1rem;font-weight:900}
@@ -47,40 +64,49 @@
     .time-display{font-size:1.7rem;font-weight:900;letter-spacing:-.03em}
     .time-sub{color:var(--muted);font-size:.9rem}
     .mini{padding:10px 12px;cursor:pointer;font-weight:800;min-height:46px}
-    .mini.active{background:#342a4d;border-color:#8b5cf6;color:#fff}
-    .input{width:100%;min-height:54px;border-radius:16px;border:1px solid var(--line);background:#171321;color:var(--text);padding:14px 15px;font-size:1rem}
+    .mini.active{background:#342a4d;border-color:var(--wisteria);color:#fff}
+    .input{width:100%;min-height:54px;border-radius:16px;border:1px solid var(--line);background:#120f17;color:var(--text);padding:14px 15px;font-size:1rem}
     textarea.input{min-height:88px;resize:vertical}
-    .footer{position:sticky;bottom:0;padding-top:12px;background:linear-gradient(180deg,rgba(13,10,19,0),rgba(13,10,19,.92) 22%,rgba(13,10,19,1))}
-    .send{width:100%;min-height:58px;border:0;background:linear-gradient(180deg,#8b5cf6,#6d28d9);font-size:1.05rem;font-weight:900;cursor:pointer}
+    .footer{position:sticky;bottom:0;padding-top:12px;background:linear-gradient(180deg,rgba(8,7,13,0),rgba(8,7,13,.94) 22%,rgba(8,7,13,1))}
+    .send{width:100%;min-height:58px;border:1px solid rgba(235,177,149,.45);background:linear-gradient(180deg,var(--ember),#b14d3a);font-size:1.05rem;font-weight:900;cursor:pointer;color:#fff8f2}
     .ghost,.navbtn{width:100%;min-height:50px;padding:0 16px;cursor:pointer;font-weight:800}
     .ghost{background:transparent}
     .nav{display:flex;gap:10px;margin-top:10px}.navbtn{flex:1}
     .hidden{display:none!important}
-    .summary{white-space:pre-wrap;font:13px/1.45 ui-monospace,monospace;background:#140f1f;border-radius:16px;border:1px solid var(--line);padding:12px;color:#ddd6fe}
+    .summary{white-space:pre-wrap;font:13px/1.45 ui-monospace,monospace;background:#100d15;border-radius:16px;border:1px solid var(--line);padding:12px;color:#f0e9ff}
+    .step-kicker{font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+    .step-orbit{font-size:.8rem;color:var(--muted);padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03)}
     @media (max-width:520px){.scale{grid-template-columns:repeat(5,minmax(0,1fr))}.choice{font-size:.95rem}.time-display{font-size:1.5rem}}
   </style>
 </head>
 <body>
   <main class="shell">
     <section class="hero">
-      <div class="eyebrow">Miko Body</div>
-      <h1>Morning check-in</h1>
-      <div class="sub">Tap through while your brain is still booting. Voice still works. This is the no-talking backup.</div>
-      <div class="chips" style="margin-top:12px">
-        <div class="chip">big tap targets</div>
-        <div class="chip">saves your draft</div>
-        <div class="chip">sends back automatically</div>
+      <div class="hero-top">
+        <div>
+          <div class="eyebrow">Miko Body · Dawn form</div>
+          <h1>Morning check-in</h1>
+          <div class="sub">Low-light, sleepy-brain mode. Tap through, set your footing, send the pulse back.</div>
+        </div>
+        <div class="sigil" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
       </div>
+      <div class="chips" style="margin-top:12px">
+        <div class="chip">dark-room friendly</div>
+        <div class="chip">keeps your draft</div>
+        <div class="chip">one-thumb flow</div>
+      </div>
+      <div class="progress-band" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
     </section>
 
     <div id="step-wake" class="stack" style="margin-top:14px">
       <section class="panel">
         <div class="section-head">
           <div>
-            <div class="section-title">1. Wake time</div>
-            <div class="section-note">Defaults to right now. Nudge it if needed.</div>
+            <div class="step-kicker">Phase one</div>
+            <div class="section-title">Wake time</div>
+            <div class="section-note">Starts at right now. Nudge if the clock drifted.</div>
           </div>
-          <div class="section-note" id="wakeBadge">now</div>
+          <div class="step-orbit" id="wakeBadge">now</div>
         </div>
         <div class="timebox">
           <div class="time-display" id="wakeDisplay">--:--</div>
@@ -96,8 +122,9 @@
 
       <section class="panel">
         <div class="section-head">
-          <div class="section-title">2. How did sleep feel?</div>
-          <div class="section-note">One tap each</div>
+          <div class="step-kicker">Phase two</div>
+          <div class="section-title">How did sleep feel?</div>
+          <div class="section-note">Quick reads only</div>
         </div>
         <div class="stack">
           <div>
@@ -129,7 +156,10 @@
     <div id="step-state" class="stack hidden" style="margin-top:14px">
       <section class="panel">
         <div class="section-head">
-          <div class="section-title">3. Morning body state</div>
+          <div>
+            <div class="step-kicker">Phase three</div>
+            <div class="section-title">Morning body state</div>
+          </div>
           <div class="section-note">Tap the vibe</div>
         </div>
         <div class="stack">
@@ -174,7 +204,10 @@
     <div id="step-plan" class="stack hidden" style="margin-top:14px">
       <section class="panel">
         <div class="section-head">
-          <div class="section-title">4. Today setup</div>
+          <div>
+            <div class="step-kicker">Phase four</div>
+            <div class="section-title">Today setup</div>
+          </div>
           <div class="section-note">Only the useful parts</div>
         </div>
         <div class="stack">
@@ -228,8 +261,11 @@
     <div id="step-review" class="stack hidden" style="margin-top:14px">
       <section class="panel">
         <div class="section-head">
-          <div class="section-title">Ready to send</div>
-          <div class="section-note">You can tweak anything before it goes back</div>
+          <div>
+            <div class="step-kicker">Final check</div>
+            <div class="section-title">Ready to send</div>
+          </div>
+          <div class="section-note">Tweak anything before it goes back</div>
         </div>
         <div id="summary" class="summary"></div>
       </section>
@@ -240,7 +276,7 @@
     </div>
 
     <div class="footer">
-      <button class="send" id="sendBtn">Send morning check-in to Miko</button>
+      <button class="send" id="sendBtn">Send the morning pulse to Miko</button>
       <button class="ghost hidden" id="copiedBtn">Copied summary</button>
     </div>
   </main>
