@@ -4,7 +4,7 @@
 Morning check-in for Telegram in a dark bedroom. One-handed, low-glare, fast to parse.
 
 ## Visual direction
-Go specifically Demon-Slayer-inspired without using exact copyrighted character art: bold black surfaces, ember red and water-cyan contrast, checker haori pattern accents, wisteria petals, katana-guard circles, slash frames, prayer-seal cards, and breathing-form motion. It should feel like a sunrise mission card from that world rather than a generic anime dashboard.
+Cool Japanese night-theme instead of anime cosplay: black lacquer surfaces, warm paper gold, indigo and ember accents, subtle asanoha/checker pattern texture, ink-brush dividers, seal-stamp chips, torii/sunrise geometry, and restrained wave motifs. It should feel like a modern Japanese title card for a dawn ritual, clean and premium.
 
 ## Rules
 - Keep contrast high and avoid bright white flood.
@@ -12,8 +12,8 @@ Go specifically Demon-Slayer-inspired without using exact copyrighted character 
 - Use texture, borders, and glow sparingly. No heavy card shadows.
 - UI chrome uses text, lines, and simple shapes. No emoji as interface icons.
 - Add personality through copy and palette, while preserving fast scanning in the dark.
-- Lean into anime tropes in text: arc, form, pulse, gauge, recovery, fog, charge, phase.
-- Decorations should feel like title-card lines, aura bands, motion trails, crests, and tiny emblem art.
+- Lean into Japanese editorial/talisman language: dawn, pulse, seal, gauge, ritual, phase, footing.
+- Decorations should feel like title-card lines, paper bands, crest marks, wave curls, and ink-brush dividers.
 
 ## Palette
 - bg: #0b0a10
@@ -31,4 +31,4 @@ Go specifically Demon-Slayer-inspired without using exact copyrighted character 
 - crimson: #8d3140
 
 ## Copy tone
-Short, awake-enough, a little dramatic. Example phrases: "Dawn check", "set your footing", "send the pulse back".
+Short, calm, premium, a little ceremonial. Example phrases: "Dawn check", "set your footing", "send the pulse back".

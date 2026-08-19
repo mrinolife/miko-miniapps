@@ -76,9 +76,6 @@
     .arc-card{padding:10px 12px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,rgba(20,15,27,.92),rgba(33,26,43,.92))}
     .arc-title{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
     .arc-copy{font-size:.84rem;color:var(--text)}
-    .haori-grid{position:absolute;right:-10px;top:-12px;width:132px;height:132px;opacity:.16;transform:rotate(12deg);background:
-      linear-gradient(90deg, transparent 0 24px, rgba(245,241,234,.9) 24px 28px, transparent 28px 52px, rgba(245,241,234,.9) 52px 56px, transparent 56px 80px),
-      linear-gradient(0deg, transparent 0 24px, rgba(245,241,234,.9) 24px 28px, transparent 28px 52px, rgba(245,241,234,.9) 52px 56px, transparent 56px 80px)}
     .silhouette-band{display:grid;grid-template-columns:1.1fr .9fr;gap:10px;margin-top:12px}
     .silhouette-card{position:relative;min-height:126px;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:linear-gradient(180deg,rgba(15,11,22,.98),rgba(23,16,31,.98))}
     .silhouette-copy{position:absolute;left:12px;bottom:12px;z-index:2;max-width:62%}
@@ -92,13 +89,6 @@
     .silhouette-flame{fill:none;stroke:rgba(217,107,79,.9);stroke-width:1.5}
     .silhouette-water{fill:none;stroke:rgba(111,183,214,.9);stroke-width:1.4}
     .kanji-badge{position:absolute;right:10px;top:10px;width:34px;height:34px;border-radius:999px;border:1px solid rgba(199,169,106,.25);background:rgba(0,0,0,.24);display:grid;place-items:center;color:var(--gold);font:900 16px/1 serif}
-    .wisteria-petals{position:absolute;left:-8px;top:-8px;width:120px;height:120px;opacity:.28;pointer-events:none}
-    .wisteria-petals span{position:absolute;display:block;width:16px;height:10px;border-radius:16px 16px 16px 0;background:linear-gradient(180deg,rgba(181,143,255,.9),rgba(122,95,208,.45));transform-origin:center}
-    .wisteria-petals span:nth-child(1){left:12px;top:20px;transform:rotate(-18deg)}
-    .wisteria-petals span:nth-child(2){left:30px;top:12px;transform:rotate(12deg)}
-    .wisteria-petals span:nth-child(3){left:48px;top:24px;transform:rotate(32deg)}
-    .wisteria-petals span:nth-child(4){left:24px;top:38px;transform:rotate(70deg)}
-    .wisteria-petals span:nth-child(5){left:52px;top:46px;transform:rotate(102deg)}
     .manga-burst{position:absolute;right:-24px;top:-12px;width:140px;height:140px;opacity:.22;pointer-events:none}
     .manga-burst path{fill:none;stroke:rgba(217,107,79,.75);stroke-width:1.2}
     .titleplate{display:inline-flex;align-items:center;gap:8px;padding:5px 10px;border:1px solid rgba(199,169,106,.22);border-radius:999px;background:rgba(0,0,0,.18)}
@@ -147,14 +137,12 @@
 <body>
   <main class="shell">
     <section class="hero">
-      <div class="wisteria-petals" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
-      <div class="haori-grid" aria-hidden="true"></div>
-      <svg class="manga-burst" viewBox="0 0 140 140" aria-hidden="true"><path d="M70 8 78 42"/><path d="M108 18 91 47"/><path d="M130 47 98 60"/><path d="M132 85 99 81"/><path d="M115 118 88 95"/><path d="M78 131 72 98"/></svg>
+            <svg class="manga-burst" viewBox="0 0 140 140" aria-hidden="true"><path d="M70 8 78 42"/><path d="M108 18 91 47"/><path d="M130 47 98 60"/><path d="M132 85 99 81"/><path d="M115 118 88 95"/><path d="M78 131 72 98"/></svg>
       <div class="hero-top">
         <div>
-          <div class="eyebrow titleplate"><svg class="titleplate-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4v16M4 12h16"/></svg>Miko Body · Dawn breathing form</div>
+          <div class="eyebrow titleplate"><svg class="titleplate-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4v16M4 12h16"/></svg>Miko Body · Dawn ritual check</div>
           <h1>Morning check-in</h1>
-          <div class="sub">Your dawn breathing form starts here. Read the gauges, clear the fog, lock the day plan, and move like a clean first strike.</div>
+          <div class="sub">Your dawn ritual starts here. Read the gauges, clear the fog, set your footing, and send the pulse back.</div>
         </div>
         <div class="hero-emblems" aria-hidden="true">
           <svg class="crest" viewBox="0 0 64 64"><circle class="crest-main" cx="32" cy="32" r="24"/><circle class="crest-main" cx="32" cy="32" r="17"/><path class="crest-accent" d="M14 35c7-1 11-6 14-15 4 4 10 6 20 5-4 12-14 19-25 19-5 0-8-4-9-9Z"/><path class="crest-ember" d="M31 15c5 4 8 9 8 15a7 7 0 1 1-14 0c0-6 2-11 6-15Z"/></svg>
@@ -164,44 +152,44 @@
       <div class="chips" style="margin-top:12px">
         <div class="chip">night-mode readable</div>
         <div class="chip">checkpoint save active</div>
-        <div class="chip">one-thumb breathing UI</div>
+        <div class="chip">one-thumb ritual UI</div>
       </div>
       <div class="progress-band" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
       <div class="arc-strip">
-        <div class="arc-card"><div class="arc-title">Water form</div><div class="arc-copy">Sleep, grogginess, morning read.</div></div>
-        <div class="arc-card"><div class="arc-title">Flame form</div><div class="arc-copy">Energy, mood, lock-in.</div></div>
-        <div class="arc-card"><div class="arc-title">Final selection</div><div class="arc-copy">Star, caffeine, shift plan.</div></div>
+        <div class="arc-card"><div class="arc-title">Rest</div><div class="arc-copy">Sleep, grogginess, morning read.</div></div>
+        <div class="arc-card"><div class="arc-title">Focus</div><div class="arc-copy">Energy, mood, lock-in.</div></div>
+        <div class="arc-card"><div class="arc-title">Day setup</div><div class="arc-copy">Star, caffeine, shift plan.</div></div>
       </div>
       <div class="silhouette-band" aria-hidden="true">
         <div class="silhouette-card">
-          <div class="kanji-badge">醒</div>
+          <div class="kanji-badge">朝</div>
           <div class="silhouette-copy">
-            <div class="silhouette-kicker">Water breathing</div>
-            <div class="silhouette-title">Wake blade drawn</div>
-            <div class="silhouette-note">Wisteria dawn, haori grid, and water-sweep motion for the wake ritual.</div>
+            <div class="silhouette-kicker">Dawn card</div>
+            <div class="silhouette-title">Paper sun, ink wave</div>
+            <div class="silhouette-note">A calmer Japanese title-card feel for the wake ritual.</div>
           </div>
           <svg class="silhouette-svg" viewBox="0 0 220 140">
-            <path class="silhouette-water" d="M10 110c25-10 36-24 48-52 7 18 25 33 49 40 23 7 54 5 96-5"/>
-            <path class="silhouette-water" d="M28 126c34-6 63-19 92-43 16-13 30-31 42-54"/>
-            <path class="silhouette-ink" d="M132 20c10 4 17 14 17 25v34l18 19-11 7-17-15-5 24h-12l2-24-14-8 9-10 9 4V48c0-13 2-22 4-28Z"/>
-            <path class="silhouette-ink" d="M113 50c7 3 12 10 12 18s-5 15-12 18c-8-3-13-10-13-18s5-15 13-18Z"/>
-            <path class="silhouette-ink" d="M96 78 70 104l7 7 30-24Z"/>
-            <path class="silhouette-line" d="M129 34c10 2 16 12 16 23"/>
-            <path class="silhouette-flame" d="M160 40c14 9 25 21 34 37"/>
+            <circle cx="164" cy="50" r="26" fill="rgba(217,107,79,.18)" stroke="rgba(217,107,79,.72)" stroke-width="1.4"/>
+            <path class="silhouette-water" d="M12 108c23-8 38-8 52 0 14 8 29 8 44 0 15-8 30-8 46 0 16 8 31 8 48 0 7-3 12-6 18-10"/>
+            <path class="silhouette-water" d="M18 122c22-8 37-8 51 0 14 8 28 8 43 0 15-8 30-8 46 0 16 8 31 8 48 0"/>
+            <path class="silhouette-line" d="M116 26c12 16 21 31 27 47"/>
+            <path class="silhouette-line" d="M141 20c8 13 16 27 21 43"/>
           </svg>
         </div>
         <div class="silhouette-card">
-          <div class="kanji-badge">視</div>
+          <div class="kanji-badge">印</div>
           <div class="silhouette-copy">
-            <div class="silhouette-kicker">Flame breathing</div>
-            <div class="silhouette-title">Eyes on the mission</div>
-            <div class="silhouette-note">Fire-line focus panel energy for the body-state pass.</div>
+            <div class="silhouette-kicker">Seal card</div>
+            <div class="silhouette-title">Set your footing</div>
+            <div class="silhouette-note">Crest, paper band, and quiet ember accents for the day setup.</div>
           </div>
           <svg class="silhouette-svg" viewBox="0 0 220 140">
-            <path class="silhouette-line" d="M18 40c27-19 54-29 83-29 46 0 85 21 112 62"/>
-            <path class="silhouette-ink" d="M154 28c14 9 22 23 22 40 0 13-4 24-13 34l15 16-9 7-18-18c-8 5-17 8-28 8-14 0-26-5-35-14s-14-21-14-35c0-13 5-25 14-34s21-14 35-14c11 0 21 3 31 10Z"/>
-            <circle class="silhouette-water" cx="116" cy="66" r="19"/>
-            <path class="silhouette-flame" d="M82 80c17 6 34 7 52 4"/>
+            <rect x="108" y="24" width="68" height="84" rx="8" fill="rgba(245,241,234,.06)" stroke="rgba(199,169,106,.45)" stroke-width="1.2"/>
+            <circle cx="142" cy="52" r="17" fill="none" stroke="rgba(199,169,106,.88)" stroke-width="1.5"/>
+            <path class="silhouette-line" d="M124 84h36"/>
+            <path class="silhouette-line" d="M124 94h36"/>
+            <path class="silhouette-flame" d="M86 94c10 8 20 12 30 13"/>
+            <path class="silhouette-water" d="M76 44c10 3 18 8 24 16"/>
           </svg>
         </div>
       </div>
@@ -263,7 +251,7 @@
         </div>
       </section>
 
-      <div class="nav"><button class="navbtn" id="toState">Next: focus form</button></div>
+      <div class="nav"><button class="navbtn" id="toState">Next: focus check</button></div>
     </div>
 
     <div id="step-state" class="stack hidden" style="margin-top:14px">
@@ -271,7 +259,7 @@
         <div class="panel-art"><svg class="panel-emblem focus" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="12" rx="8" ry="5"/><path d="M12 7c2 1.2 3 3 3 5s-1 3.8-3 5c-2-1.2-3-3-3-5s1-3.8 3-5Z"/></svg></div>
         <div class="section-head">
           <div>
-            <div class="step-kicker">Focus form</div>
+            <div class="step-kicker">Focus check</div>
             <div class="section-title">Morning body state</div>
           </div>
           <div class="section-note">Read the gauges</div>
@@ -311,7 +299,7 @@
       </section>
       <div class="nav">
         <button class="navbtn" id="backToWake">Back</button>
-        <button class="navbtn" id="toPlan">Next: mission setup</button>
+        <button class="navbtn" id="toPlan">Next: day setup</button>
       </div>
     </div>
 
@@ -320,7 +308,7 @@
         <div class="panel-art"><svg class="panel-emblem setup" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><path d="M12 4.5v15M4.5 12h15"/></svg></div>
         <div class="section-head">
           <div>
-            <div class="step-kicker">Mission setup</div>
+            <div class="step-kicker">Day setup</div>
             <div class="section-title">Today setup</div>
           </div>
           <div class="section-note">Load only what matters</div>
@@ -363,13 +351,13 @@
           </div>
           <div>
             <div class="section-note" style="margin-bottom:8px">Side note</div>
-            <textarea id="note" class="input" placeholder="Only if the episode got weird"></textarea>
+            <textarea id="note" class="input" placeholder="Only if something needs context"></textarea>
           </div>
         </div>
       </section>
       <div class="nav">
         <button class="navbtn" id="backToState">Back</button>
-        <button class="navbtn" id="toReview">Preview episode card</button>
+        <button class="navbtn" id="toReview">Preview summary card</button>
       </div>
     </div>
 
