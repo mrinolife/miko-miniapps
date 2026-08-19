@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Morning Check-In</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root{
+      --bg:#120f1b;
+      --panel:#1b1726;
+      --card:#241f33;
+      --line:#3a3152;
+      --text:#f6f1ff;
+      --muted:#b8adc8;
+      --accent:#8b5cf6;
+      --accent2:#22c55e;
+      --accent3:#f59e0b;
+      --danger:#fb7185;
+      --shadow:0 14px 34px rgba(0,0,0,.28);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(180deg,#151120,#100d18 44%,#0d0a13);color:var(--text)}
+    .shell{max-width:760px;margin:0 auto;padding:16px 14px 34px}
+    .hero,.panel{background:rgba(27,23,38,.96);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow)}
+    .hero{padding:18px 16px}
+    .eyebrow{font:800 12px/1.2 ui-monospace,monospace;color:#c4b5fd;text-transform:uppercase;letter-spacing:.12em}
+    h1{margin:8px 0 6px;font-size:1.8rem;line-height:1}
+    .sub{color:var(--muted);line-height:1.45}
+    .stack{display:grid;gap:14px;margin-top:14px}
+    .panel{padding:14px}
+    .section-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-end;margin-bottom:10px}
+    .section-title{font-size:1.05rem;font-weight:800}
+    .section-note{font-size:.86rem;color:var(--muted)}
+    .chips,.row{display:flex;gap:8px;flex-wrap:wrap}
+    .chip,.choice,.mini,.ghost,.send,.navbtn{border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--text)}
+    .chip{padding:8px 10px;font-size:.84rem;color:var(--muted)}
+    .choice{min-height:54px;padding:12px 14px;font-weight:700;font-size:1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:1;min-width:0}
+    .choice.active{background:linear-gradient(180deg,#8b5cf6,#7c3aed);border-color:#9f7aea;color:#fff}
+    .choice.soft.active{background:linear-gradient(180deg,#22c55e,#16a34a);border-color:#4ade80}
+    .choice.warn.active{background:linear-gradient(180deg,#f59e0b,#d97706);border-color:#fbbf24;color:#261700}
+    .scale{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+    .scale .choice{padding:10px 6px;min-height:60px;flex-direction:column;gap:4px}
+    .scale-num{font-size:1.1rem;font-weight:900}
+    .scale-label{font-size:.74rem;color:inherit;opacity:.92;line-height:1.05;text-align:center}
+    .timebox{display:grid;gap:10px}
+    .time-display{font-size:1.7rem;font-weight:900;letter-spacing:-.03em}
+    .time-sub{color:var(--muted);font-size:.9rem}
+    .mini{padding:10px 12px;cursor:pointer;font-weight:800;min-height:46px}
+    .mini.active{background:#342a4d;border-color:#8b5cf6;color:#fff}
+    .input{width:100%;min-height:54px;border-radius:16px;border:1px solid var(--line);background:#171321;color:var(--text);padding:14px 15px;font-size:1rem}
+    textarea.input{min-height:88px;resize:vertical}
+    .footer{position:sticky;bottom:0;padding-top:12px;background:linear-gradient(180deg,rgba(13,10,19,0),rgba(13,10,19,.92) 22%,rgba(13,10,19,1))}
+    .send{width:100%;min-height:58px;border:0;background:linear-gradient(180deg,#8b5cf6,#6d28d9);font-size:1.05rem;font-weight:900;cursor:pointer}
+    .ghost,.navbtn{width:100%;min-height:50px;padding:0 16px;cursor:pointer;font-weight:800}
+    .ghost{background:transparent}
+    .nav{display:flex;gap:10px;margin-top:10px}.navbtn{flex:1}
+    .hidden{display:none!important}
+    .summary{white-space:pre-wrap;font:13px/1.45 ui-monospace,monospace;background:#140f1f;border-radius:16px;border:1px solid var(--line);padding:12px;color:#ddd6fe}
+    @media (max-width:520px){.scale{grid-template-columns:repeat(5,minmax(0,1fr))}.choice{font-size:.95rem}.time-display{font-size:1.5rem}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="eyebrow">Miko Body</div>
+      <h1>Morning check-in</h1>
+      <div class="sub">Tap through while your brain is still booting. Voice still works. This is the no-talking backup.</div>
+      <div class="chips" style="margin-top:12px">
+        <div class="chip">big tap targets</div>
+        <div class="chip">saves your draft</div>
+        <div class="chip">sends back automatically</div>
+      </div>
+    </section>
+
+    <div id="step-wake" class="stack" style="margin-top:14px">
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <div class="section-title">1. Wake time</div>
+            <div class="section-note">Defaults to right now. Nudge it if needed.</div>
+          </div>
+          <div class="section-note" id="wakeBadge">now</div>
+        </div>
+        <div class="timebox">
+          <div class="time-display" id="wakeDisplay">--:--</div>
+          <div class="row">
+            <button class="mini" data-adjust="-30">-30 min</button>
+            <button class="mini" data-adjust="-15">-15</button>
+            <button class="mini" data-adjust="15">+15</button>
+            <button class="mini" data-adjust="30">+30</button>
+          </div>
+          <input class="input" id="wakeInput" type="time">
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div class="section-title">2. How did sleep feel?</div>
+          <div class="section-note">One tap each</div>
+        </div>
+        <div class="stack">
+          <div>
+            <div class="section-note" style="margin-bottom:8px">Sleep quality</div>
+            <div class="scale" data-scale="sleep_quality">
+              <button class="choice soft" data-value="1"><span class="scale-num">1</span><span class="scale-label">rough</span></button>
+              <button class="choice soft" data-value="2"><span class="scale-num">2</span><span class="scale-label">bad</span></button>
+              <button class="choice soft" data-value="3"><span class="scale-num">3</span><span class="scale-label">ok</span></button>
+              <button class="choice soft" data-value="4"><span class="scale-num">4</span><span class="scale-label">good</span></button>
+              <button class="choice soft" data-value="5"><span class="scale-num">5</span><span class="scale-label">great</span></button>
+            </div>
+          </div>
+          <div>
+            <div class="section-note" style="margin-bottom:8px">Grogginess</div>
+            <div class="scale" data-scale="grogginess">
+              <button class="choice warn" data-value="1"><span class="scale-num">1</span><span class="scale-label">clear</span></button>
+              <button class="choice warn" data-value="2"><span class="scale-num">2</span><span class="scale-label">light</span></button>
+              <button class="choice warn" data-value="3"><span class="scale-num">3</span><span class="scale-label">medium</span></button>
+              <button class="choice warn" data-value="4"><span class="scale-num">4</span><span class="scale-label">heavy</span></button>
+              <button class="choice warn" data-value="5"><span class="scale-num">5</span><span class="scale-label">zombie</span></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="nav"><button class="navbtn" id="toState">Next: body state</button></div>
+    </div>
+
+    <div id="step-state" class="stack hidden" style="margin-top:14px">
+      <section class="panel">
+        <div class="section-head">
+          <div class="section-title">3. Morning body state</div>
+          <div class="section-note">Tap the vibe</div>
+        </div>
+        <div class="stack">
+          <div>
+            <div class="section-note" style="margin-bottom:8px">Energy</div>
+            <div class="scale" data-scale="energy">
+              <button class="choice" data-value="1"><span class="scale-num">1</span><span class="scale-label">dead</span></button>
+              <button class="choice" data-value="2"><span class="scale-num">2</span><span class="scale-label">low</span></button>
+              <button class="choice" data-value="3"><span class="scale-num">3</span><span class="scale-label">fine</span></button>
+              <button class="choice" data-value="4"><span class="scale-num">4</span><span class="scale-label">solid</span></button>
+              <button class="choice" data-value="5"><span class="scale-num">5</span><span class="scale-label">charged</span></button>
+            </div>
+          </div>
+          <div>
+            <div class="section-note" style="margin-bottom:8px">Mood</div>
+            <div class="scale" data-scale="mood">
+              <button class="choice" data-value="1"><span class="scale-num">1</span><span class="scale-label">grim</span></button>
+              <button class="choice" data-value="2"><span class="scale-num">2</span><span class="scale-label">off</span></button>
+              <button class="choice" data-value="3"><span class="scale-num">3</span><span class="scale-label">ok</span></button>
+              <button class="choice" data-value="4"><span class="scale-num">4</span><span class="scale-label">good</span></button>
+              <button class="choice" data-value="5"><span class="scale-num">5</span><span class="scale-label">bright</span></button>
+            </div>
+          </div>
+          <div>
+            <div class="section-note" style="margin-bottom:8px">Focus</div>
+            <div class="scale" data-scale="focus">
+              <button class="choice" data-value="1"><span class="scale-num">1</span><span class="scale-label">fog</span></button>
+              <button class="choice" data-value="2"><span class="scale-num">2</span><span class="scale-label">scattered</span></button>
+              <button class="choice" data-value="3"><span class="scale-num">3</span><span class="scale-label">usable</span></button>
+              <button class="choice" data-value="4"><span class="scale-num">4</span><span class="scale-label">locked in</span></button>
+              <button class="choice" data-value="5"><span class="scale-num">5</span><span class="scale-label">laser</span></button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="nav">
+        <button class="navbtn" id="backToWake">Back</button>
+        <button class="navbtn" id="toPlan">Next: today setup</button>
+      </div>
+    </div>
+
+    <div id="step-plan" class="stack hidden" style="margin-top:14px">
+      <section class="panel">
+        <div class="section-head">
+          <div class="section-title">4. Today setup</div>
+          <div class="section-note">Only the useful parts</div>
+        </div>
+        <div class="stack">
+          <div>
+            <div class="section-note" style="margin-bottom:8px">Star so far?</div>
+            <div class="row" data-choice-group="star_taken">
+              <button class="choice" data-value="not_yet">Not yet</button>
+              <button class="choice" data-value="yes">Took it</button>
+              <button class="choice" data-value="skip_today">Skipping / none</button>
+            </div>
+          </div>
+          <div>
+            <div class="section-note" style="margin-bottom:8px">Caffeine so far?</div>
+            <div class="row" data-choice-group="caffeine">
+              <button class="choice" data-value="none">None</button>
+              <button class="choice" data-value="some">Some</button>
+              <button class="choice" data-value="a_lot">A lot</button>
+            </div>
+          </div>
+          <div>
+            <div class="section-note" style="margin-bottom:8px">Work start / shift</div>
+            <div class="row" data-choice-group="work_start">
+              <button class="choice" data-value="off">Off day</button>
+              <button class="choice" data-value="soon">Soon</button>
+              <button class="choice" data-value="later">Later</button>
+              <button class="choice" data-value="night">Night shift</button>
+            </div>
+          </div>
+          <div>
+            <div class="section-note" style="margin-bottom:8px">Anything unusual?</div>
+            <div class="row" data-choice-group="flags" data-multi="true">
+              <button class="choice" data-value="poor_sleep">Poor sleep</button>
+              <button class="choice" data-value="stress">Stress</button>
+              <button class="choice" data-value="late_meal">Late meal</button>
+              <button class="choice" data-value="sick">Sick</button>
+              <button class="choice" data-value="training_today">Training today</button>
+            </div>
+          </div>
+          <div>
+            <div class="section-note" style="margin-bottom:8px">Optional quick note</div>
+            <textarea id="note" class="input" placeholder="Only if something weird happened"></textarea>
+          </div>
+        </div>
+      </section>
+      <div class="nav">
+        <button class="navbtn" id="backToState">Back</button>
+        <button class="navbtn" id="toReview">Preview</button>
+      </div>
+    </div>
+
+    <div id="step-review" class="stack hidden" style="margin-top:14px">
+      <section class="panel">
+        <div class="section-head">
+          <div class="section-title">Ready to send</div>
+          <div class="section-note">You can tweak anything before it goes back</div>
+        </div>
+        <div id="summary" class="summary"></div>
+      </section>
+      <div class="nav">
+        <button class="navbtn" id="backToPlan">Back</button>
+        <button class="navbtn" id="resetDraft">Reset</button>
+      </div>
+    </div>
+
+    <div class="footer">
+      <button class="send" id="sendBtn">Send morning check-in to Miko</button>
+      <button class="ghost hidden" id="copiedBtn">Copied summary</button>
+    </div>
+  </main>
+
+  <script>
+    const STORAGE_KEY = 'miko-morning-checkin-draft-v1';
+    const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+    if (tg) { tg.ready(); tg.expand(); }
+
+    const now = new Date();
+    const defaultTime = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+    const state = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null') || {
+      wake_time: defaultTime,
+      sleep_quality: null,
+      grogginess: null,
+      energy: null,
+      mood: null,
+      focus: null,
+      star_taken: null,
+      caffeine: null,
+      work_start: null,
+      flags: [],
+      note: ''
+    };
+
+    const steps = ['step-wake','step-state','step-plan','step-review'];
+    let currentStep = 0;
+
+    function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); renderSummary(); }
+    function showStep(index){
+      currentStep = Math.max(0, Math.min(index, steps.length - 1));
+      steps.forEach((id, i) => document.getElementById(id).classList.toggle('hidden', i !== currentStep));
+      if (currentStep === 3) renderSummary();
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+    function formatTime(value){
+      if(!value) return '--:--';
+      const [h,m] = value.split(':').map(Number);
+      const suffix = h >= 12 ? 'PM' : 'AM';
+      const hour = ((h + 11) % 12) + 1;
+      return `${hour}:${String(m).padStart(2,'0')} ${suffix}`;
+    }
+    function setWakeTime(value){
+      state.wake_time = value;
+      document.getElementById('wakeInput').value = value;
+      document.getElementById('wakeDisplay').textContent = formatTime(value);
+      save();
+    }
+    function adjustWake(delta){
+      const [h,m] = (state.wake_time || defaultTime).split(':').map(Number);
+      const date = new Date();
+      date.setHours(h, m, 0, 0);
+      date.setMinutes(date.getMinutes() + delta);
+      setWakeTime(`${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`);
+    }
+    function bindScale(name){
+      const root = document.querySelector(`[data-scale="${name}"]`);
+      root.querySelectorAll('[data-value]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state[name] = Number(btn.dataset.value);
+          root.querySelectorAll('[data-value]').forEach(b => b.classList.toggle('active', Number(b.dataset.value) === state[name]));
+          save();
+        });
+      });
+    }
+    function bindGroup(name){
+      const root = document.querySelector(`[data-choice-group="${name}"]`);
+      const multi = root.dataset.multi === 'true';
+      root.querySelectorAll('[data-value]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const value = btn.dataset.value;
+          if (multi) {
+            const set = new Set(state[name] || []);
+            if (set.has(value)) set.delete(value); else set.add(value);
+            state[name] = Array.from(set);
+            root.querySelectorAll('[data-value]').forEach(b => b.classList.toggle('active', state[name].includes(b.dataset.value)));
+          } else {
+            state[name] = value;
+            root.querySelectorAll('[data-value]').forEach(b => b.classList.toggle('active', b.dataset.value === value));
+          }
+          save();
+        });
+      });
+    }
+    function renderSummary(){
+      const flags = (state.flags || []).length ? state.flags.join(', ') : 'none';
+      const summary = [
+        `Wake: ${formatTime(state.wake_time)}`,
+        `Sleep quality: ${state.sleep_quality ?? '?'}/5`,
+        `Grogginess: ${state.grogginess ?? '?'}/5`,
+        `Energy: ${state.energy ?? '?'}/5`,
+        `Mood: ${state.mood ?? '?'}/5`,
+        `Focus: ${state.focus ?? '?'}/5`,
+        `Star: ${state.star_taken || 'not set'}`,
+        `Caffeine so far: ${state.caffeine || 'not set'}`,
+        `Work: ${state.work_start || 'not set'}`,
+        `Flags: ${flags}`,
+        `Note: ${state.note || 'none'}`
+      ].join('\n');
+      document.getElementById('summary').textContent = summary;
+    }
+    function messageText(){
+      const bits = [
+        `Morning check-in`,
+        `wake ${formatTime(state.wake_time)}`,
+        `sleep quality ${state.sleep_quality ?? '?'}/5`,
+        `grogginess ${state.grogginess ?? '?'}/5`,
+        `energy ${state.energy ?? '?'}/5`,
+        `mood ${state.mood ?? '?'}/5`,
+        `focus ${state.focus ?? '?'}/5`,
+        `Star ${state.star_taken || 'not set'}`,
+        `caffeine ${state.caffeine || 'not set'}`,
+        `work ${state.work_start || 'not set'}`
+      ];
+      if ((state.flags || []).length) bits.push(`flags ${state.flags.join(', ')}`);
+      if (state.note && state.note.trim()) bits.push(`note ${state.note.trim()}`);
+      return bits.join(' · ');
+    }
+    function send(){
+      const payload = {
+        type: 'morning_checkin',
+        text: messageText(),
+        wake_time: state.wake_time,
+        sleep_quality: state.sleep_quality,
+        grogginess: state.grogginess,
+        energy: state.energy,
+        mood: state.mood,
+        focus: state.focus,
+        star_taken: state.star_taken,
+        caffeine: state.caffeine,
+        work_start: state.work_start,
+        flags: state.flags,
+        note: state.note.trim()
+      };
+      if (tg) {
+        tg.sendData(JSON.stringify(payload));
+        localStorage.removeItem(STORAGE_KEY);
+        tg.close();
+        return;
+      }
+      navigator.clipboard.writeText(payload.text).then(() => {
+        document.getElementById('copiedBtn').classList.remove('hidden');
+      });
+    }
+
+    document.querySelectorAll('[data-adjust]').forEach(btn => btn.addEventListener('click', () => adjustWake(Number(btn.dataset.adjust))));
+    document.getElementById('wakeInput').addEventListener('input', e => setWakeTime(e.target.value));
+    document.getElementById('note').addEventListener('input', e => { state.note = e.target.value; save(); });
+
+    bindScale('sleep_quality');
+    bindScale('grogginess');
+    bindScale('energy');
+    bindScale('mood');
+    bindScale('focus');
+    bindGroup('star_taken');
+    bindGroup('caffeine');
+    bindGroup('work_start');
+    bindGroup('flags');
+
+    document.getElementById('toState').addEventListener('click', () => showStep(1));
+    document.getElementById('backToWake').addEventListener('click', () => showStep(0));
+    document.getElementById('toPlan').addEventListener('click', () => showStep(2));
+    document.getElementById('backToState').addEventListener('click', () => showStep(1));
+    document.getElementById('toReview').addEventListener('click', () => showStep(3));
+    document.getElementById('backToPlan').addEventListener('click', () => showStep(2));
+    document.getElementById('sendBtn').addEventListener('click', send);
+    document.getElementById('resetDraft').addEventListener('click', () => {
+      localStorage.removeItem(STORAGE_KEY);
+      location.reload();
+    });
+
+    setWakeTime(state.wake_time || defaultTime);
+    document.getElementById('note').value = state.note || '';
+    [['sleep_quality'],['grogginess'],['energy'],['mood'],['focus']].forEach(([name]) => {
+      if (state[name] != null) {
+        document.querySelectorAll(`[data-scale="${name}"] [data-value]`).forEach(b => b.classList.toggle('active', Number(b.dataset.value) === Number(state[name])));
+      }
+    });
+    ['star_taken','caffeine','work_start'].forEach(name => {
+      if (state[name]) document.querySelectorAll(`[data-choice-group="${name}"] [data-value]`).forEach(b => b.classList.toggle('active', b.dataset.value === state[name]));
+    });
+    document.querySelectorAll('[data-choice-group="flags"] [data-value]').forEach(b => b.classList.toggle('active', (state.flags || []).includes(b.dataset.value)));
+    renderSummary();
+    showStep(0);
+  </script>
+</body>
+</html>
