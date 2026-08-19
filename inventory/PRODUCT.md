@@ -185,6 +185,9 @@ infra                 deployment and observability
 ### Phase 0: Body proving ground, now
 Use-first inventory, quick add, local persistence, easy meal ranking, Telegram event return.
 
+## Tonight Mode
+Tonight Mode is the smallest honest dinner-decision slice: the user picks exactly one capacity state (`Open + eat`, `Low effort`, or `I can cook`) and sees exactly three ranked recipes from their local recipe box, with starter fallbacks only when the box is sparse. Each candidate explains why it fits tonight, separates likely-on-hand ingredients from uncertain and missing ones, links into the existing Visual Cook Path, and can resolve to cook as planned, make it easier, add 1-3 missing items, or save for later. Post-meal memory records actual effort, whether it works on a low-capacity day, and an optional note; those outcomes feed the next local ranking pass without exposing device-local source media or pretending the prototype extracted structured inventory from screenshots.
+
 ### Phase 1: Private alpha
 Real image capture and review, backend sync, item editing, barcode lookup, expiry confidence, telemetry, 20–40 design partners.
 

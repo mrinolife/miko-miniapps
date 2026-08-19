@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#245b46">
+  <title>Tonight Mode · Body Kitchen</title>
+  <style>
+    :root{--paper:#f3f0e7;--panel:#fbf9f2;--ink:#17211d;--muted:#66726c;--line:#cfcabd;--leaf:#245b46;--pale:#dbe6dc;--amber:#b86825;--brick:#9d3f35;--yellow:#f0c75e}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--paper);color:var(--ink);font-family:"Avenir Next","Segoe UI",sans-serif}
+    button,input,textarea{font:inherit}
+    .shell{max-width:760px;margin:auto;padding:calc(18px + env(safe-area-inset-top)) 14px calc(108px + env(safe-area-inset-bottom))}
+    .mast{display:flex;justify-content:space-between;align-items:end;border-bottom:2px solid var(--ink);padding:6px 2px 13px}
+    .brand{font:600 27px/1 Georgia,serif}
+    .brand small{display:block;font:800 10px/1.3 ui-monospace,monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--leaf);margin-bottom:6px}
+    .back{width:46px;height:46px;border:1px solid var(--line);border-radius:13px;background:transparent;font-size:21px}
+    .lede{padding:18px 2px 14px}
+    .lede h1{font:600 33px/1.02 Georgia,serif;margin:0 0 7px;max-width:10ch}
+    .lede p{margin:0;max-width:31rem;color:var(--muted);font-size:14px;line-height:1.5}
+    .memory-strip{margin-top:12px;padding:11px 12px;border-left:4px solid var(--amber);background:#efe6d7;font-size:12px;line-height:1.45}
+    .capacity{margin:10px 0 18px}
+    .capacity label{display:block;font:800 10px ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--leaf);margin:0 0 8px}
+    .chips{display:flex;gap:8px;overflow:auto;padding-bottom:4px}
+    .chips button{min-height:46px;white-space:nowrap;border:1px solid var(--line);border-radius:999px;background:transparent;padding:0 14px;font-weight:850;color:var(--muted)}
+    .chips button.active{background:var(--ink);border-color:var(--ink);color:#fff}
+    .board{display:grid;gap:12px}
+    .candidate{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:15px}
+    .rankline{display:flex;justify-content:space-between;gap:10px;align-items:start}
+    .rank{font:800 10px ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--leaf)}
+    .candidate h2{font:600 27px/1.02 Georgia,serif;margin:8px 0 5px}
+    .meta{font-size:12px;color:var(--muted)}
+    .why{margin:12px 0 14px;font-size:14px;line-height:1.48}
+    .grid{display:grid;gap:10px}
+    .lane{border-top:1px solid var(--line);padding-top:10px}
+    .lane strong{display:block;font:800 10px ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;margin-bottom:7px}
+    .pills{display:flex;flex-wrap:wrap;gap:7px}
+    .pill{display:inline-flex;align-items:center;min-height:29px;padding:0 10px;border-radius:999px;border:1px solid var(--line);font-size:12px;background:#fff}
+    .pill.on{background:var(--pale);color:var(--leaf);border-color:#b8cbbb}
+    .pill.maybe{background:#f5eedc;color:#7a5620;border-color:#dbc394}
+    .pill.miss{background:#f2dfdc;color:var(--brick);border-color:#d4aaa3}
+    .select{margin-top:14px;width:100%;min-height:50px;border:0;border-radius:13px;background:var(--leaf);color:#fff;font-weight:900}
+    .empty-note{padding:18px;border:1px dashed var(--line);border-radius:16px;color:var(--muted);text-align:center}
+    .decision{position:fixed;left:0;right:0;bottom:0;max-height:92dvh;overflow-y:auto;overscroll-behavior:contain;background:#f7f3ebf2;border-top:1px solid var(--line);backdrop-filter:blur(14px);padding:12px 14px calc(12px + env(safe-area-inset-bottom));display:none}
+    .decision.show{display:block}
+    .decision-card{max-width:760px;margin:auto}
+    .decision-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .dismiss{width:44px;height:44px;border:1px solid var(--line);border-radius:12px;background:var(--panel);font-size:22px;color:var(--ink)}
+    .decision-card .kicker{font:800 10px ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--leaf)}
+    .decision-card h3{font:600 26px/1.02 Georgia,serif;margin:7px 0 4px}
+    .decision-card p{margin:0 0 12px;color:var(--muted);font-size:13px;line-height:1.45}
+    .routes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .routes button,.routes a{min-height:52px;border:1px solid var(--line);border-radius:13px;background:var(--panel);padding:10px 12px;text-align:left;font-weight:850;color:var(--ink);text-decoration:none}
+    .routes .primary{background:var(--ink);border-color:var(--ink);color:#fff}
+    .easier,.shopping,.saved{display:none;margin-top:10px;padding:13px;border-radius:14px;border:1px solid var(--line);background:var(--panel)}
+    .easier.show,.shopping.show,.saved.show{display:block}
+    .easier h4,.shopping h4,.saved h4{font:600 19px Georgia,serif;margin:0 0 7px}
+    .easier p,.shopping p,.saved p{margin:0 0 8px;font-size:13px;line-height:1.45;color:var(--muted)}
+    .shopping ul,.easier ul{margin:0;padding-left:18px;font-size:13px;line-height:1.45}
+    .remember{margin-top:10px;padding:13px;border-radius:14px;border:1px solid var(--line);background:#f5eed8}
+    .remember h4{font:600 20px Georgia,serif;margin:0 0 9px}
+    .remember label.top{display:block;font:800 10px ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;margin:12px 0 7px}
+    .choice-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+    .choice-row.two{grid-template-columns:repeat(2,1fr)}
+    .choice-row button{min-height:44px;border:1px solid var(--line);border-radius:11px;background:#fff;font-weight:850}
+    .choice-row button.active{background:var(--ink);border-color:var(--ink);color:#fff}
+    .remember textarea{width:100%;min-height:84px;border:1px solid var(--line);border-radius:11px;padding:10px;background:#fff}
+    .remember .save-memory{margin-top:12px;width:100%;min-height:48px;border:0;border-radius:12px;background:var(--leaf);color:#fff;font-weight:900}
+    .privacy{margin-top:18px;padding:14px;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+    .privacy h2{font:600 22px Georgia,serif;margin:0 0 8px}
+    .privacy p{margin:0;font-size:13px;line-height:1.45;color:var(--muted)}
+    .toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,30px);background:var(--ink);color:#fff;border-radius:12px;padding:11px 15px;font-size:13px;opacity:0;transition:.25s;pointer-events:none}
+    .toast.show{opacity:1;transform:translate(-50%,0)}
+    @media(min-width:640px){
+      .board{grid-template-columns:repeat(3,1fr)}
+      .candidate{display:flex;flex-direction:column}
+      .select{margin-top:auto}
+    }
+    @media(prefers-reduced-motion:reduce){.toast{transition:none}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="mast">
+      <div class="brand"><small>Body Kitchen</small>Tonight Mode</div>
+      <button class="back" onclick="location.href='../recipes/'" aria-label="Back">‹</button>
+    </header>
+
+    <section class="lede">
+      <h1>Dinner for the capacity you actually have.</h1>
+      <p>Pick tonight’s lane once. Body Kitchen ranks three saved recipes, shows what is likely around, and keeps the decision honest when the recipe details are incomplete.</p>
+      <div class="memory-strip" id="memoryStrip"></div>
+    </section>
+
+    <section class="capacity" aria-labelledby="capacityLabel">
+      <label id="capacityLabel">Current capacity</label>
+      <div class="chips" id="capacityChips">
+        <button class="active" data-capacity="open">Open + eat</button>
+        <button data-capacity="easy">Low effort</button>
+        <button data-capacity="cook">I can cook</button>
+      </div>
+    </section>
+
+    <section class="board" id="board"></section>
+
+    <section class="privacy">
+      <h2>Privacy boundary</h2>
+      <p>Tonight Mode ranks only the structured recipe memory saved in this browser. Device-local screenshot references stay device-local, are never shown here, and never cross into the community or ranking payload.</p>
+    </section>
+  </main>
+
+  <section class="decision" id="decision">
+    <div class="decision-card">
+      <div class="decision-top"><div class="kicker">Tonight’s pick</div><button class="dismiss" id="dismissDecision" type="button" aria-label="Compare other meals">×</button></div>
+      <h3 id="decisionTitle"></h3>
+      <p id="decisionWhy"></p>
+      <div class="routes">
+        <a class="primary" id="cookPlanned" href="../recipes/cook/">Cook as planned</a>
+        <button id="makeEasier">Make it easier</button>
+        <button id="addMissing">Add 1-3 missing items</button>
+        <button id="saveLater">Save for later</button>
+      </div>
+      <div class="easier" id="easierPanel"></div>
+      <div class="shopping" id="shoppingPanel"></div>
+      <div class="saved" id="savedPanel"></div>
+      <form class="remember" id="rememberForm">
+        <h4>After dinner, save what actually happened.</h4>
+        <label class="top">Actual effort</label>
+        <div class="choice-row" id="actualEffort">
+          <button type="button" data-value="open">Open + eat</button>
+          <button type="button" data-value="easy">Low effort</button>
+          <button type="button" data-value="cook">I can cook</button>
+        </div>
+        <label class="top">Works on a low-capacity day?</label>
+        <div class="choice-row two" id="lowCapacity">
+          <button type="button" data-value="yes">Yes</button>
+          <button type="button" data-value="no">No</button>
+        </div>
+        <label class="top" for="note">Optional note</label>
+        <textarea id="note" placeholder="What changed, what helped, what made cleanup easier."></textarea>
+        <button class="save-memory" type="submit">Save tonight’s memory</button>
+      </form>
+    </div>
+  </section>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const RECIPE_KEY = 'body-recipe-box-v1';
+    const INVENTORY_KEY = 'body-kitchen-v1';
+    const TONIGHT_KEY = 'body-tonight-mode-v1';
+    const startRecipes = [
+      {id:1,title:'Crispy salmon rice bowl',source:'Saved idea',effort:'cook',time:'25 min'},
+      {id:2,title:'Yogurt crunch bowl',source:'Body Kitchen starter',effort:'open',time:'3 min'},
+      {id:3,title:'Chicken scallion rice',source:'Body Kitchen starter',effort:'easy',time:'12 min'}
+    ];
+    const recipeProfiles = {
+      'crispy salmon rice bowl':{
+        craving:'savory rice bowl',
+        on:['jasmine rice'],
+        uncertain:['salmon','cucumber','sauce'],
+        missing:['nori or crunchy topping'],
+        easierSteps:['Use already-cooked rice or microwave rice instead of starting a pot.','Serve the sauce on the side and skip extra garnishes.','Eat it as a deconstructed bowl from one plate to cut cleanup.'],
+        easierCleanup:'One bowl, one fork, no second pan.'
+      },
+      'yogurt crunch bowl':{
+        craving:'cold creamy crunch',
+        on:['greek yogurt'],
+        uncertain:['fruit','jam'],
+        missing:['granola or cereal'],
+        easierSteps:['Use the tub, one bowl, and one spoon.','Skip chopping; a spoon of jam keeps the sweet-crunch craving alive.','Build only one serving so there is nothing to store.'],
+        easierCleanup:'One bowl and one spoon.'
+      },
+      'chicken scallion rice':{
+        craving:'warm savory rice bowl',
+        on:['leftover chicken','jasmine rice'],
+        uncertain:['scallions','soy sauce'],
+        missing:['sesame oil'],
+        easierSteps:['Use leftover chicken and hot rice instead of cooking fresh protein.','Stir everything in one microwave-safe bowl.','Leave the scallions out if chopping feels like too much.'],
+        easierCleanup:'One bowl, no cutting board if you skip scallions.'
+      },
+      'shortcut korean bbq bowl':{
+        craving:'sweet-savory bowl',
+        on:['leftover chicken','jasmine rice'],
+        uncertain:['bbq sauce','frozen broccoli'],
+        missing:['sesame seeds'],
+        easierSteps:['Keep the sauce on the side and use any leftover protein.','Microwave the rice and broccoli together.','Skip garnish and plate it as one bowl.'],
+        easierCleanup:'One bowl and one fork.'
+      },
+      'gochujang pork and cabbage':{
+        craving:'warm spicy skillet',
+        on:[],
+        uncertain:['pork','cabbage','gochujang'],
+        missing:['rice'],
+        easierSteps:['Keep the spicy-sweet profile but swap to any cooked leftover meat.','Use bagged slaw instead of chopping cabbage.','Serve over toast or microwave rice to avoid a second pan.'],
+        easierCleanup:'One pan if you already have rice.'
+      }
+    };
+
+    const requestedId = Number(new URLSearchParams(location.search).get('recipe')) || null;
+    let capacity = loadTonight().capacity || 'open';
+    let selectedId = requestedId || loadTonight().selectedId || null;
+    let actualEffortChoice = null;
+    let lowCapacityChoice = null;
+    let selectedOutcome = 'cook_planned';
+    let toastTimer = null;
+
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => [...document.querySelectorAll(selector)];
+
+    function loadRecipes(){
+      const saved = JSON.parse(localStorage.getItem(RECIPE_KEY) || 'null') || startRecipes;
+      const merged = [...saved];
+      for(const starter of startRecipes){
+        if(!merged.some((recipe) => normalize(recipe.title) === normalize(starter.title))){
+          merged.push(starter);
+        }
+      }
+      return merged;
+    }
+
+    function loadInventory(){
+      return JSON.parse(localStorage.getItem(INVENTORY_KEY) || '[]');
+    }
+
+    function loadTonight(){
+      return JSON.parse(localStorage.getItem(TONIGHT_KEY) || '{"history":[]}');
+    }
+
+    function saveTonight(data){
+      localStorage.setItem(TONIGHT_KEY, JSON.stringify(data));
+    }
+
+    function normalize(value){
+      return String(value || '').trim().toLowerCase();
+    }
+
+    function esc(value){
+      return String(value).replace(/[&<>"']/g, (char) => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+      }[char]));
+    }
+
+    function labelEffort(value){
+      return value === 'open' ? 'Open + eat' : value === 'easy' ? 'Low effort' : 'I can cook';
+    }
+
+    function historyFor(recipeId){
+      return loadTonight().history.filter((entry) => entry.recipeId === recipeId);
+    }
+
+    function recipeProfile(recipe){
+      return recipeProfiles[normalize(recipe.title)] || buildFallbackProfile(recipe);
+    }
+
+    function buildFallbackProfile(recipe){
+      const title = normalize(recipe.title);
+      const ingredients = [];
+      if(title.includes('rice')) ingredients.push('jasmine rice');
+      if(title.includes('yogurt')) ingredients.push('greek yogurt');
+      if(title.includes('chicken')) ingredients.push('leftover chicken');
+      if(title.includes('salmon')) ingredients.push('salmon');
+      if(title.includes('bowl')) ingredients.push('sauce');
+      return {
+        craving:title.includes('bowl') ? 'the same bowl-shaped comfort' : 'the same saved craving',
+        on:[],
+        uncertain:ingredients.length ? ingredients.slice(0,3) : ['main ingredient from your saved recipe'],
+        missing:ingredients.length ? ['one finishing item'] : ['some ingredients still need confirmation'],
+        easierSteps:[
+          'Keep the same flavor direction, but cut the recipe down to one serving.',
+          'Use leftovers, microwave shortcuts, or ready-to-eat components first.',
+          'Skip garnish and serve everything in one bowl or on one plate.'
+        ],
+        easierCleanup:'One bowl or plate, and fewer prep transitions.'
+      };
+    }
+
+    function ingredientState(profile, inventory){
+      const names = inventory.map((item) => normalize(item.name));
+      const on = profile.on.filter((item) => names.some((name) => name.includes(normalize(item)) || normalize(item).includes(name)));
+      const unresolvedOn = profile.on.filter((item) => !on.includes(item));
+      const uncertain = [...new Set([...unresolvedOn, ...profile.uncertain])].slice(0, 4);
+      const missing = profile.missing.slice(0, 3);
+      return {on, uncertain, missing};
+    }
+
+    function scoreRecipe(recipe, inventory){
+      const profile = recipeProfile(recipe);
+      const memory = historyFor(recipe.id);
+      const states = ingredientState(profile, inventory);
+      let score = 0;
+      score += recipe.effort === capacity ? 28 : recipe.effort === 'easy' && capacity === 'open' ? 8 : 0;
+      score += states.on.length * 5;
+      score -= states.missing.length * 2;
+      for(const entry of memory){
+        if(entry.outcome === 'cook_planned') score += 8;
+        if(entry.outcome === 'make_easier') score += 5;
+        if(entry.outcome === 'add_missing') score -= 1;
+        if(entry.outcome === 'save_later') score -= 4;
+        if(entry.lowCapacity === 'yes' && (capacity === 'open' || capacity === 'easy')) score += 7;
+        if(entry.lowCapacity === 'no' && capacity === 'open') score -= 6;
+        if(entry.actualEffort === capacity) score += 3;
+      }
+      if(recipe.local_reference_id) score -= 1;
+      return {score, states, profile, memoryCount:memory.length};
+    }
+
+    function whyText(recipe, scored){
+      const likely = scored.states.on.length ? `Likely on hand: ${scored.states.on.join(', ')}.` : 'No reliable on-hand ingredient match yet.';
+      const memory = scored.memoryCount ? ` Past outcomes for this recipe are already shaping the order.` : ' Tonight will create the first memory for this recipe.';
+      if(capacity === 'open'){
+        return `This keeps the craving close to what you saved while protecting a low-capacity night. ${likely}${memory}`;
+      }
+      if(capacity === 'easy'){
+        return `This looks like the cleanest bridge between what you want and what might already be in the kitchen. ${likely}${memory}`;
+      }
+      return `This earns the cook slot because the effort fits tonight better than the others and the ingredient gaps are still readable. ${likely}${memory}`;
+    }
+
+    function pickCandidates(){
+      const inventory = loadInventory();
+      const ranked = loadRecipes()
+        .map((recipe) => ({recipe, ...scoreRecipe(recipe, inventory)}))
+        .sort((a, b) => b.score - a.score || a.recipe.title.localeCompare(b.recipe.title));
+      if(requestedId){
+        const requested = ranked.find((entry) => Number(entry.recipe.id) === requestedId);
+        if(requested) return [requested, ...ranked.filter((entry) => entry !== requested)].slice(0, 3);
+      }
+      return ranked.slice(0, 3);
+    }
+
+    function renderMemoryStrip(){
+      const tonight = loadTonight();
+      const latest = [...tonight.history].reverse().find(Boolean);
+      $('#memoryStrip').textContent = latest
+        ? `Last time: ${latest.title} was marked ${latest.outcome.replaceAll('_', ' ')} with actual effort ${labelEffort(latest.actualEffort || latest.capacity)}.`
+        : 'No dinner memory yet. Tonight Mode will start learning from what actually happened, not from assumed pantry intelligence.';
+    }
+
+    function renderBoard(){
+      renderMemoryStrip();
+      const candidates = pickCandidates();
+      $('#board').innerHTML = candidates.length ? candidates.map((entry, index) => {
+        const recipe = entry.recipe;
+        return `<article class="candidate">
+          <div class="rankline">
+            <div class="rank">Rank ${index + 1}</div>
+            <div class="meta">${esc(recipe.time || 'time unknown')} · ${esc(labelEffort(recipe.effort || 'easy'))}</div>
+          </div>
+          <h2>${esc(recipe.title)}</h2>
+          <div class="meta">${esc(recipe.source || 'Saved recipe')}</div>
+          <p class="why">${esc(whyText(recipe, entry))}</p>
+          <div class="grid">
+            <div class="lane">
+              <strong>Likely on hand</strong>
+              <div class="pills">${renderPills(entry.states.on, 'on', 'Nothing reliable')}</div>
+            </div>
+            <div class="lane">
+              <strong>Uncertain</strong>
+              <div class="pills">${renderPills(entry.states.uncertain, 'maybe', 'Needs a quick check')}</div>
+            </div>
+            <div class="lane">
+              <strong>Missing</strong>
+              <div class="pills">${renderPills(entry.states.missing, 'miss', 'No clear blocker')}</div>
+            </div>
+          </div>
+          <button class="select" type="button" onclick="selectMeal(${recipe.id})">Choose for tonight</button>
+        </article>`;
+      }).join('') : '<div class="empty-note">Save a few recipes first. Tonight Mode will fall back to starter recipes when your box is sparse.</div>';
+      if(selectedId){
+        const chosen = candidates.find((entry) => entry.recipe.id === selectedId) || candidates[0];
+        if(chosen) openDecision(chosen.recipe.id);
+      }
+    }
+
+    function renderPills(items, kind, emptyLabel){
+      if(!items.length) return `<span class="pill ${kind}">${esc(emptyLabel)}</span>`;
+      return items.map((item) => `<span class="pill ${kind}">${esc(item)}</span>`).join('');
+    }
+
+    function showToast(message){
+      const node = $('#toast');
+      node.textContent = message;
+      node.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => node.classList.remove('show'), 1800);
+    }
+
+    function persistTonight(update){
+      const current = loadTonight();
+      const next = {...current, ...update};
+      saveTonight(next);
+    }
+
+    function syncCapacityButtons(){
+      $$('#capacityChips button').forEach((button) => {
+        button.classList.toggle('active', button.dataset.capacity === capacity);
+      });
+    }
+
+    function decisionRecipe(recipeId){
+      const recipe = loadRecipes().find((entry) => Number(entry.id) === Number(recipeId));
+      if(!recipe) return null;
+      return {recipe, ...scoreRecipe(recipe, loadInventory())};
+    }
+
+    function openDecision(recipeId){
+      const chosen = decisionRecipe(recipeId);
+      if(!chosen) return;
+      selectedId = recipeId;
+      persistTonight({capacity, selectedId});
+      $('#decision').classList.add('show');
+      $('#decisionTitle').textContent = chosen.recipe.title;
+      $('#decisionWhy').textContent = whyText(chosen.recipe, chosen);
+      $('#cookPlanned').href = '../recipes/cook/';
+      selectedOutcome = 'cook_planned';
+      $('#easierPanel').className = 'easier';
+      $('#shoppingPanel').className = 'shopping';
+      $('#savedPanel').className = 'saved';
+      resetRememberForm();
+      const prior = historyFor(recipeId).at(-1);
+      if(prior){
+        actualEffortChoice = prior.actualEffort || null;
+        lowCapacityChoice = prior.lowCapacity || null;
+        $('#note').value = '';
+        paintChoiceRow('#actualEffort', actualEffortChoice);
+        paintChoiceRow('#lowCapacity', lowCapacityChoice);
+      }
+    }
+
+    function resetRememberForm(){
+      actualEffortChoice = null;
+      lowCapacityChoice = null;
+      $('#note').value = '';
+      paintChoiceRow('#actualEffort', null);
+      paintChoiceRow('#lowCapacity', null);
+    }
+
+    function paintChoiceRow(selector, value){
+      $$(selector + ' button').forEach((button) => {
+        button.classList.toggle('active', button.dataset.value === value);
+      });
+    }
+
+    function saveOutcome(outcome){
+      const chosen = decisionRecipe(selectedId);
+      if(!chosen) return;
+      const current = loadTonight();
+      const history = current.history || [];
+      const nextEntry = {
+        recipeId: chosen.recipe.id,
+        title: chosen.recipe.title,
+        capacity,
+        outcome,
+        actualEffort: actualEffortChoice,
+        lowCapacity: lowCapacityChoice,
+        note: $('#note').value.trim(),
+        savedAt: new Date().toISOString()
+      };
+      history.push(nextEntry);
+      saveTonight({capacity, selectedId, history, pending:null});
+      renderBoard();
+      showToast('Tonight memory saved');
+    }
+
+    function buildShoppingPanel(entry){
+      const items = entry.states.missing.slice(0, 3);
+      return `<h4>Add only the blockers</h4>
+        <p>Keep the craving. Buy the fewest possible items that turn this into tonight’s dinner.</p>
+        <ul>${items.map((item) => `<li>${esc(item)}</li>`).join('') || '<li>No blocker identified yet.</li>'}</ul>`;
+    }
+
+    function buildEasierPanel(entry){
+      return `<h4>Same craving, lower lift</h4>
+        <p>This keeps the ${esc(entry.profile.craving)} but removes extra transitions and cleanup.</p>
+        <ul>${entry.profile.easierSteps.map((step) => `<li>${esc(step)}</li>`).join('')}</ul>
+        <p><strong>Cleanup change:</strong> ${esc(entry.profile.easierCleanup)}</p>`;
+    }
+
+    function init(){
+      syncCapacityButtons();
+      renderBoard();
+
+      $$('#capacityChips button').forEach((button) => {
+        button.addEventListener('click', () => {
+          capacity = button.dataset.capacity;
+          persistTonight({capacity, selectedId:null});
+          selectedId = null;
+          syncCapacityButtons();
+          $('#decision').classList.remove('show');
+          renderBoard();
+        });
+      });
+
+      $('#dismissDecision').addEventListener('click', () => {
+        $('#decision').classList.remove('show');
+        selectedId = null;
+        persistTonight({selectedId:null});
+      });
+
+      $('#makeEasier').addEventListener('click', () => {
+        const chosen = decisionRecipe(selectedId);
+        if(!chosen) return;
+        selectedOutcome = 'make_easier';
+        persistTonight({pending:{recipeId:chosen.recipe.id,title:chosen.recipe.title,capacity,outcome:selectedOutcome,chosenAt:new Date().toISOString()}});
+        const panel = $('#easierPanel');
+        panel.innerHTML = buildEasierPanel(chosen);
+        panel.classList.add('show');
+        $('#shoppingPanel').classList.remove('show');
+        $('#savedPanel').classList.remove('show');
+        showToast('Lower-effort route opened');
+      });
+
+      $('#addMissing').addEventListener('click', () => {
+        const chosen = decisionRecipe(selectedId);
+        if(!chosen) return;
+        selectedOutcome = 'add_missing';
+        persistTonight({pending:{recipeId:chosen.recipe.id,title:chosen.recipe.title,capacity,outcome:selectedOutcome,chosenAt:new Date().toISOString()}});
+        const panel = $('#shoppingPanel');
+        panel.innerHTML = buildShoppingPanel(chosen);
+        panel.classList.add('show');
+        $('#easierPanel').classList.remove('show');
+        $('#savedPanel').classList.remove('show');
+        showToast('Missing items listed');
+      });
+
+      $('#saveLater').addEventListener('click', () => {
+        const chosen = decisionRecipe(selectedId);
+        if(!chosen) return;
+        selectedOutcome = 'save_later';
+        persistTonight({pending:{recipeId:chosen.recipe.id,title:chosen.recipe.title,capacity,outcome:selectedOutcome,chosenAt:new Date().toISOString()}});
+        const panel = $('#savedPanel');
+        panel.innerHTML = `<h4>Saved for later</h4><p>${esc(chosen.recipe.title)} stays in your box, and that outcome will slightly lower its rank on the next similar night.</p>`;
+        panel.classList.add('show');
+        $('#easierPanel').classList.remove('show');
+        $('#shoppingPanel').classList.remove('show');
+        resetRememberForm();
+        showToast('Saved for a different night');
+      });
+
+      $('#cookPlanned').addEventListener('click', () => {
+        if(!selectedId) return;
+        selectedOutcome = 'cook_planned';
+        const chosen = decisionRecipe(selectedId);
+        persistTonight({pending:{recipeId:chosen.recipe.id,title:chosen.recipe.title,capacity,outcome:selectedOutcome,chosenAt:new Date().toISOString()}});
+        if(!actualEffortChoice){
+          actualEffortChoice = capacity;
+          paintChoiceRow('#actualEffort', actualEffortChoice);
+        }
+        showToast('Opening Visual Cook Path');
+      });
+
+      $$('#actualEffort button').forEach((button) => {
+        button.addEventListener('click', () => {
+          actualEffortChoice = button.dataset.value;
+          paintChoiceRow('#actualEffort', actualEffortChoice);
+        });
+      });
+
+      $$('#lowCapacity button').forEach((button) => {
+        button.addEventListener('click', () => {
+          lowCapacityChoice = button.dataset.value;
+          paintChoiceRow('#lowCapacity', lowCapacityChoice);
+        });
+      });
+
+      $('#rememberForm').addEventListener('submit', (event) => {
+        event.preventDefault();
+        if(!selectedId) return showToast('Choose a meal first');
+        if(!actualEffortChoice || !lowCapacityChoice){
+          return showToast('Save actual effort and low-capacity fit');
+        }
+        saveOutcome(selectedOutcome);
+      });
+    }
+
+    window.selectMeal = openDecision;
+    init();
+  </script>
+</body>
+</html>
