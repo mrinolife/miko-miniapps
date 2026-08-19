@@ -20,6 +20,16 @@ The system may transform functional cooking facts into a private recipe draft. I
 | Screenshot | Ephemeral private processing | Raw image deleted after extraction unless user deliberately retains it privately | Raw screenshot always stripped |
 | Licensed creator media | Follow the specific license and provenance record | Use only within granted scope | Only as the license permits |
 
+## Three-layer object boundary
+
+Body Kitchen deliberately stores three separate objects:
+
+1. **Private source reference** — the user's optional original screenshot or media reference. By default this stays in browser IndexedDB on that device. A temporary cloud processing copy, when a production extractor requires one, has a short enforced TTL.
+2. **Personal recipe memory** — durable structured cooking facts, rewritten steps, provenance, private notes, preferences, cook history, and a pointer to any device-local source. It never embeds the source blob.
+3. **Kitchen Table post** — a newly constructed allowlisted public object. It is not the personal recipe with a public flag.
+
+Deleting layer 1 keeps layers 2 and 3 intact. Removing a public post does not erase the user's private recipe memory. Local source IDs and blobs never cross the community serialization boundary.
+
 ## Screenshot lifecycle
 
 1. User selects an image locally.
