@@ -4,7 +4,7 @@
 Morning check-in for Telegram in a dark bedroom. One-handed, low-glare, fast to parse.
 
 ## Visual direction
-Full stylized anime interface with actual visual motifs on-screen, not just themed words. Use original inline art and symbols: manga speed lines, blade-ring crest, eye/gaze emblem for focus, sleep moon crest, energy flame mark, water-sweep trails, wisteria petal shapes, chapter-card framing, and dramatic label plates. Feels like an anime opening card or mission HUD for the check-in itself.
+Go specifically Demon-Slayer-inspired without using exact copyrighted character art: bold black surfaces, ember red and water-cyan contrast, checker haori pattern accents, wisteria petals, katana-guard circles, slash frames, prayer-seal cards, and breathing-form motion. It should feel like a sunrise mission card from that world rather than a generic anime dashboard.
 
 ## Rules
 - Keep contrast high and avoid bright white flood.

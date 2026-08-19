@@ -28,15 +28,23 @@
       radial-gradient(circle at 82% 14%, rgba(217,107,79,.18), transparent 18%),
       linear-gradient(180deg,var(--bg2),var(--bg) 46%,#08070d);
       color:var(--text)}
-    body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.2;background:
-      linear-gradient(120deg, transparent 0 46%, rgba(111,183,214,.04) 46% 47%, transparent 47% 100%),
-      repeating-linear-gradient(135deg, rgba(199,169,106,.03) 0 2px, transparent 2px 18px)}
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.24;background:
+      linear-gradient(120deg, transparent 0 46%, rgba(111,183,214,.05) 46% 47%, transparent 47% 100%),
+      repeating-linear-gradient(135deg, rgba(199,169,106,.03) 0 2px, transparent 2px 18px),
+      radial-gradient(circle at 12% 16%, rgba(122,95,208,.12) 0 3px, transparent 4px 18px),
+      radial-gradient(circle at 18% 22%, rgba(122,95,208,.1) 0 2px, transparent 3px 14px),
+      radial-gradient(circle at 84% 14%, rgba(217,107,79,.12) 0 4px, transparent 5px 22px)}
     .shell{max-width:760px;margin:0 auto;padding:16px 14px 34px;position:relative}
-    .hero,.panel{background:linear-gradient(180deg,rgba(29,22,39,.97),rgba(20,16,27,.97));border:1px solid var(--line);border-radius:24px;box-shadow:none;position:relative;overflow:hidden}
+    .hero,.panel{background:linear-gradient(180deg,rgba(20,14,24,.985),rgba(10,8,14,.99));border:1px solid var(--line);border-radius:24px;box-shadow:none;position:relative;overflow:hidden}
     .hero::after,.panel::after{content:"";position:absolute;inset:0;pointer-events:none;background:
       linear-gradient(180deg,rgba(255,255,255,.03),transparent 30%),
-      repeating-linear-gradient(90deg, transparent 0 18px, rgba(217,107,79,.03) 18px 19px, transparent 19px 40px)}
+      repeating-linear-gradient(90deg, transparent 0 18px, rgba(217,107,79,.03) 18px 19px, transparent 19px 40px),
+      linear-gradient(90deg, transparent 0 64%, rgba(255,255,255,.02) 64% 65%, transparent 65% 100%)}
     .hero{padding:18px 16px;border-color:var(--line-strong)}
+    .hero::before{content:"";position:absolute;inset:0;pointer-events:none;background:
+      linear-gradient(135deg, rgba(201,38,38,.1) 0 12%, transparent 12% 100%),
+      linear-gradient(315deg, rgba(111,183,214,.08) 0 16%, transparent 16% 100%),
+      linear-gradient(90deg, transparent 0 72%, rgba(122,95,208,.08) 72% 100%)}
     .eyebrow{font:800 12px/1.2 ui-monospace,monospace;color:var(--gold);text-transform:uppercase;letter-spacing:.12em}
     h1{margin:8px 0 6px;font-size:1.9rem;line-height:1;color:#fff5ea}
     .sub{color:var(--muted);line-height:1.45}
@@ -55,6 +63,9 @@
     .progress-band{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:14px}
     .progress-band span{height:4px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(199,169,106,.12)}
     .progress-band span:nth-child(1){background:linear-gradient(90deg,var(--ember),var(--gold))}
+    .progress-band span:nth-child(2){background:linear-gradient(90deg,rgba(111,183,214,.7),rgba(122,95,208,.7))}
+    .progress-band span:nth-child(3){background:linear-gradient(90deg,rgba(217,107,79,.4),rgba(217,107,79,.8))}
+    .progress-band span:nth-child(4){background:linear-gradient(90deg,rgba(199,169,106,.35),rgba(245,241,234,.35))}
     .crest{width:62px;height:62px;opacity:.95}
     .crest circle,.crest path,.crest ellipse{vector-effect:non-scaling-stroke}
     .crest-main{stroke:rgba(199,169,106,.92);fill:none;stroke-width:1.6}
@@ -65,6 +76,9 @@
     .arc-card{padding:10px 12px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,rgba(20,15,27,.92),rgba(33,26,43,.92))}
     .arc-title{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
     .arc-copy{font-size:.84rem;color:var(--text)}
+    .haori-grid{position:absolute;right:-10px;top:-12px;width:132px;height:132px;opacity:.16;transform:rotate(12deg);background:
+      linear-gradient(90deg, transparent 0 24px, rgba(245,241,234,.9) 24px 28px, transparent 28px 52px, rgba(245,241,234,.9) 52px 56px, transparent 56px 80px),
+      linear-gradient(0deg, transparent 0 24px, rgba(245,241,234,.9) 24px 28px, transparent 28px 52px, rgba(245,241,234,.9) 52px 56px, transparent 56px 80px)}
     .silhouette-band{display:grid;grid-template-columns:1.1fr .9fr;gap:10px;margin-top:12px}
     .silhouette-card{position:relative;min-height:126px;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:linear-gradient(180deg,rgba(15,11,22,.98),rgba(23,16,31,.98))}
     .silhouette-copy{position:absolute;left:12px;bottom:12px;z-index:2;max-width:62%}
@@ -78,6 +92,13 @@
     .silhouette-flame{fill:none;stroke:rgba(217,107,79,.9);stroke-width:1.5}
     .silhouette-water{fill:none;stroke:rgba(111,183,214,.9);stroke-width:1.4}
     .kanji-badge{position:absolute;right:10px;top:10px;width:34px;height:34px;border-radius:999px;border:1px solid rgba(199,169,106,.25);background:rgba(0,0,0,.24);display:grid;place-items:center;color:var(--gold);font:900 16px/1 serif}
+    .wisteria-petals{position:absolute;left:-8px;top:-8px;width:120px;height:120px;opacity:.28;pointer-events:none}
+    .wisteria-petals span{position:absolute;display:block;width:16px;height:10px;border-radius:16px 16px 16px 0;background:linear-gradient(180deg,rgba(181,143,255,.9),rgba(122,95,208,.45));transform-origin:center}
+    .wisteria-petals span:nth-child(1){left:12px;top:20px;transform:rotate(-18deg)}
+    .wisteria-petals span:nth-child(2){left:30px;top:12px;transform:rotate(12deg)}
+    .wisteria-petals span:nth-child(3){left:48px;top:24px;transform:rotate(32deg)}
+    .wisteria-petals span:nth-child(4){left:24px;top:38px;transform:rotate(70deg)}
+    .wisteria-petals span:nth-child(5){left:52px;top:46px;transform:rotate(102deg)}
     .manga-burst{position:absolute;right:-24px;top:-12px;width:140px;height:140px;opacity:.22;pointer-events:none}
     .manga-burst path{fill:none;stroke:rgba(217,107,79,.75);stroke-width:1.2}
     .titleplate{display:inline-flex;align-items:center;gap:8px;padding:5px 10px;border:1px solid rgba(199,169,106,.22);border-radius:999px;background:rgba(0,0,0,.18)}
@@ -126,12 +147,14 @@
 <body>
   <main class="shell">
     <section class="hero">
+      <div class="wisteria-petals" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="haori-grid" aria-hidden="true"></div>
       <svg class="manga-burst" viewBox="0 0 140 140" aria-hidden="true"><path d="M70 8 78 42"/><path d="M108 18 91 47"/><path d="M130 47 98 60"/><path d="M132 85 99 81"/><path d="M115 118 88 95"/><path d="M78 131 72 98"/></svg>
       <div class="hero-top">
         <div>
-          <div class="eyebrow titleplate"><svg class="titleplate-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4v16M4 12h16"/></svg>Miko Body · Dawn form briefing</div>
+          <div class="eyebrow titleplate"><svg class="titleplate-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4v16M4 12h16"/></svg>Miko Body · Dawn breathing form</div>
           <h1>Morning check-in</h1>
-          <div class="sub">Your dawn arc starts here. Read the gauges, clear the fog, lock the day plan, send the pulse back.</div>
+          <div class="sub">Your dawn breathing form starts here. Read the gauges, clear the fog, lock the day plan, and move like a clean first strike.</div>
         </div>
         <div class="hero-emblems" aria-hidden="true">
           <svg class="crest" viewBox="0 0 64 64"><circle class="crest-main" cx="32" cy="32" r="24"/><circle class="crest-main" cx="32" cy="32" r="17"/><path class="crest-accent" d="M14 35c7-1 11-6 14-15 4 4 10 6 20 5-4 12-14 19-25 19-5 0-8-4-9-9Z"/><path class="crest-ember" d="M31 15c5 4 8 9 8 15a7 7 0 1 1-14 0c0-6 2-11 6-15Z"/></svg>
@@ -141,21 +164,21 @@
       <div class="chips" style="margin-top:12px">
         <div class="chip">night-mode readable</div>
         <div class="chip">checkpoint save active</div>
-        <div class="chip">one-thumb combat UI</div>
+        <div class="chip">one-thumb breathing UI</div>
       </div>
       <div class="progress-band" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
       <div class="arc-strip">
-        <div class="arc-card"><div class="arc-title">Recovery arc</div><div class="arc-copy">Sleep, grogginess, morning read.</div></div>
-        <div class="arc-card"><div class="arc-title">Focus form</div><div class="arc-copy">Energy, mood, lock-in.</div></div>
-        <div class="arc-card"><div class="arc-title">Day setup</div><div class="arc-copy">Star, caffeine, shift plan.</div></div>
+        <div class="arc-card"><div class="arc-title">Water form</div><div class="arc-copy">Sleep, grogginess, morning read.</div></div>
+        <div class="arc-card"><div class="arc-title">Flame form</div><div class="arc-copy">Energy, mood, lock-in.</div></div>
+        <div class="arc-card"><div class="arc-title">Final selection</div><div class="arc-copy">Star, caffeine, shift plan.</div></div>
       </div>
       <div class="silhouette-band" aria-hidden="true">
         <div class="silhouette-card">
           <div class="kanji-badge">醒</div>
           <div class="silhouette-copy">
-            <div class="silhouette-kicker">Chapter zero</div>
+            <div class="silhouette-kicker">Water breathing</div>
             <div class="silhouette-title">Wake blade drawn</div>
-            <div class="silhouette-note">Original swordsman silhouette art for the dawn check ritual.</div>
+            <div class="silhouette-note">Wisteria dawn, haori grid, and water-sweep motion for the wake ritual.</div>
           </div>
           <svg class="silhouette-svg" viewBox="0 0 220 140">
             <path class="silhouette-water" d="M10 110c25-10 36-24 48-52 7 18 25 33 49 40 23 7 54 5 96-5"/>
@@ -170,9 +193,9 @@
         <div class="silhouette-card">
           <div class="kanji-badge">視</div>
           <div class="silhouette-copy">
-            <div class="silhouette-kicker">Focus panel</div>
+            <div class="silhouette-kicker">Flame breathing</div>
             <div class="silhouette-title">Eyes on the mission</div>
-            <div class="silhouette-note">Manga-panel stare energy for the body-state pass.</div>
+            <div class="silhouette-note">Fire-line focus panel energy for the body-state pass.</div>
           </div>
           <svg class="silhouette-svg" viewBox="0 0 220 140">
             <path class="silhouette-line" d="M18 40c27-19 54-29 83-29 46 0 85 21 112 62"/>
