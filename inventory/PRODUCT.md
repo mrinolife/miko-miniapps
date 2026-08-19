@@ -1,7 +1,14 @@
 # Body Kitchen: product blueprint
 
 ## Product sentence
-A kitchen memory system that notices food before you forget it and turns the food you have into a meal you can handle today.
+A recipe memory and kitchen companion that starts with food you already want, makes it easier for the effort you have today, and gradually learns what is at home.
+
+## Onboarding wedge: desire before inventory
+The first-run experience asks for recipes, cravings, and foods the user already likes. They can paste TikTok, Instagram, YouTube, and web links; share a post into the app; add a screenshot; dictate an idea; or type messy text. Body Kitchen stores the source, extracts a recipe draft when permitted, and keeps an unresolved save useful even when extraction fails.
+
+Inventory is introduced later as a way to answer specific questions: “Can I make this?”, “What substitute do I have?”, and “What should I buy?” Quick photo capture is offered contextually from a saved recipe or shopping trip. A user can keep a recipe box without cataloging their kitchen.
+
+The recurring delight loop is an effort-filtered **Dinner Draw**. It reveals one saved or compatible recipe with a tactile animation. The draw honors energy, time, sensory preferences, equipment, dietary needs, and available ingredients; it never chooses from food the user has rejected.
 
 ## Audience and wedge
 Launch for adults with ADHD, autistic adults, burned-out caregivers, and anyone whose executive function changes day to day. The public category is food inventory and meal planning. The sharp entry point is “I bought food, forgot it existed, and ordered delivery anyway.”
@@ -9,11 +16,11 @@ Launch for adults with ADHD, autistic adults, burned-out caregivers, and anyone 
 The product is useful without diagnosis or disclosure. Accessibility appears in the interaction model: recognition over recall, low-decision defaults, interruption-safe drafts, forgiving estimates, variable-effort recipes, and no shame loops.
 
 ## Core loop
-1. **Capture:** open directly to one quick photo of the fridge, groceries, barcode, or receipt. Partial is useful. Voice and manual quick-add remain first-class; an optional Deep scan handles users who want shelf-by-shelf completeness.
-2. **Confirm:** the app presents a short review queue, grouped by confidence. One swipe accepts; uncertainty is visible. It may offer one optional extra angle when the first image has poor coverage, never a required sweep.
-3. **Notice:** a use-first queue shows only the food that needs a decision soon.
-4. **Choose:** recipes rank by food urgency, current energy, time, equipment, sensory preferences, protein goal, and missing ingredients.
-5. **Resolve:** cooked, eaten, frozen, discarded, or “still here.” Inventory and waste learning update from that action.
+1. **Want:** save a recipe, social post, craving, screenshot, or rough meal idea. The source remains attached and creator attribution is preserved.
+2. **Shape:** extract a recipe draft where platform access permits, then offer effort modes, substitutions, equipment changes, and sensory/dietary adjustments.
+3. **Choose:** use Dinner Draw or browse by current energy and time. The reveal is playful; the candidate pool stays predictable and user-controlled.
+4. **Connect:** show what is probably available, what is missing, and substitutions. Invite quick inventory capture only when it reduces work for this recipe.
+5. **Resolve:** cook, save for later, add missing items to shopping, or choose something easier. Inventory learns naturally from confirmed purchases and cooking events.
 
 ## The differentiators
 
