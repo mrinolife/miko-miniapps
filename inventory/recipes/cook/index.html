@@ -1,1 +1,689 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#10251f"><title>Visual Cook Path</title><style>:root{--paper:#f3f0e7;--panel:#fffdf7;--ink:#17211d;--muted:#66726c;--line:#cec8b9;--leaf:#245b46;--yellow:#f2c85a;--brick:#a34b3d}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:"Avenir Next","Segoe UI",sans-serif}.shell{max-width:620px;margin:auto;padding:18px 14px 100px}.top{display:flex;align-items:center;justify-content:space-between}.close,.quiet{min-height:44px;border:1px solid var(--line);border-radius:12px;background:transparent;font-weight:800;padding:0 13px}.eyebrow{font:800 10px ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--leaf)}h1{font:600 26px/1.05 Georgia,serif;margin:8px 0 4px}.sub{font-size:12px;color:var(--muted)}.phases{display:flex;gap:5px;margin:17px 0}.phase{height:6px;flex:1;background:#d9d4c8;border-radius:8px}.phase.done{background:var(--leaf)}.phase.now{background:var(--yellow)}.map{display:flex;justify-content:space-between;font:700 10px ui-monospace,monospace;color:var(--muted);margin-top:-10px}.visual{margin-top:17px;background:#dce7de;border:1px solid #b8c9bc;border-radius:23px;overflow:hidden;height:286px;display:grid;place-items:center;position:relative}.visual svg{width:88%;height:88%}.visual .label{position:absolute;top:13px;left:13px;background:var(--yellow);padding:7px 9px;font:800 10px ui-monospace,monospace;text-transform:uppercase;transform:rotate(-1.5deg)}.step{padding:18px 3px 4px}.step small{font:800 10px ui-monospace,monospace;color:var(--brick);letter-spacing:.12em;text-transform:uppercase}.step h2{font:600 30px/1.05 Georgia,serif;margin:7px 0}.amount{display:inline-block;background:var(--panel);border:1px solid var(--line);padding:8px 10px;border-radius:10px;font-weight:900;margin:3px 0 10px}.step p{font-size:15px;line-height:1.45;color:#46524c;margin:0}.cue{margin:14px 0;background:#eee4d5;border-left:4px solid var(--brick);padding:12px;font-size:13px;line-height:1.4}.cue b{display:block;color:var(--brick);margin-bottom:3px}.details{border:1px solid var(--line);border-radius:13px;background:var(--panel);padding:0 13px;margin:13px 0}.details summary{min-height:48px;display:flex;align-items:center;font-weight:850}.details p{font-size:13px;line-height:1.45;color:var(--muted);margin:0 0 13px}.resume{width:100%;min-height:48px;border:1px dashed var(--leaf);background:transparent;color:var(--leaf);border-radius:12px;font-weight:850}.nav{position:fixed;bottom:0;left:0;right:0;background:#f3f0e7ec;border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;backdrop-filter:blur(10px)}.nav button{min-height:54px;border-radius:14px;font-weight:900}.prev{width:72px;border:1px solid var(--line);background:var(--panel)}.next{flex:1;border:0;background:var(--leaf);color:white}.notice{position:fixed;inset:0;background:#101914d9;display:none;place-items:center;padding:20px}.notice.show{display:grid}.notice-card{max-width:340px;background:var(--panel);border-radius:20px;padding:21px}.notice-card h3{font:600 25px Georgia,serif;margin:0 0 7px}.notice-card p{color:var(--muted);font-size:14px;line-height:1.45}.notice-card button{width:100%;min-height:50px;border:0;border-radius:12px;background:var(--yellow);font-weight:900}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}</style></head><body><main class="shell"><div class="top"><button class="close" onclick="location.href='../../'">‹ Recipe</button><button class="quiet" id="quiet">Read aloud</button></div><div class="eyebrow">Visual Cook Path · demo</div><h1>Crispy salmon rice bowl</h1><div class="sub" id="state">Step 2 of 5 · Prep phase · about 18 minutes to eat</div><div class="phases"><i class="phase done"></i><i class="phase now"></i><i class="phase"></i><i class="phase"></i></div><div class="map"><span>Gather</span><span>Prep</span><span>Cook</span><span>Finish</span></div><section class="visual" id="visual"><span class="label">What this looks like</span></section><section class="step"><small id="stepno">One thing now</small><h2 id="title"></h2><div class="amount" id="amount"></div><p id="words"></p></section><div class="cue" id="cue"></div><details class="details"><summary>Show me more detail</summary><p id="detail"></p></details><button class="resume" id="interrupt">I got interrupted</button></main><nav class="nav"><button class="prev" id="prev">Back</button><button class="next" id="next">Done — next picture</button></nav><div class="notice" id="notice"><div class="notice-card"><div class="eyebrow">Paused safely</div><h3>Here’s where you were.</h3><p id="resumeText"></p><button id="return">Return to this picture</button></div></div><script>const steps=[{title:'Put everything nearby',amount:'5 items',words:'Set out salmon, cooked rice, cucumber, sauce, and one pan.',cue:'You are done when all five are visible. Nothing needs opening yet.',detail:'This “gather” picture prevents mid-step searching. If something is missing, the substitution button would appear here.',svg:'<svg viewBox="0 0 400 250" fill="none"><rect x="30" y="145" width="340" height="36" rx="18" fill="#245b46"/><circle cx="86" cy="112" r="38" fill="#f2c85a"/><rect x="140" y="75" width="72" height="67" rx="15" fill="#ed8b72"/><path d="M244 137c9-56 37-76 70-63 14 35-11 68-70 63Z" fill="#77a878"/><rect x="322" y="90" width="28" height="55" rx="8" fill="#a34b3d"/></svg>'},{title:'Slice the cucumber',amount:'½ cucumber',words:'Make thick half-moons. They do not need to match.',cue:'Stop when the pieces are easy to pick up with a fork.',detail:'Place the flat cut side down so it cannot roll. No cucumber? Use shredded cabbage or leave it out.',svg:'<svg viewBox="0 0 400 250" fill="none"><rect x="35" y="42" width="330" height="166" rx="25" fill="#f8f2df" stroke="#245b46" stroke-width="4"/><rect x="70" y="110" width="148" height="48" rx="24" fill="#39795a"/><path d="M94 111v46M128 111v46M162 111v46M196 111v46" stroke="#b9d39b" stroke-width="6"/><path d="M235 137c0-22 18-40 40-40v80c-22 0-40-18-40-40ZM282 137c0-22 18-40 40-40v80c-22 0-40-18-40-40Z" fill="#78a85f" stroke="#245b46" stroke-width="4"/><path d="m273 55 68 68-17 17-68-68Z" fill="#a34b3d"/><path d="m256 72 68 68-18 18-68-68Z" fill="#d9ddd7"/></svg>'},{title:'Cook the salmon',amount:'1 salmon fillet',words:'Put it in the hot pan, skin-side down. Leave it alone for 4 minutes.',cue:'Look for opaque color climbing halfway up the side. Use a verified food thermometer for safe doneness.',detail:'The picture shows position and visual change—not proof of safety. The production app would show the current authoritative temperature guidance.',svg:'<svg viewBox="0 0 400 250" fill="none"><ellipse cx="200" cy="148" rx="151" ry="69" fill="#17211d"/><ellipse cx="200" cy="139" rx="125" ry="48" fill="#43554c"/><path d="M125 128c36-52 111-52 150 0-29 44-118 44-150 0Z" fill="#ee8d74"/><path d="M144 128c30-27 82-27 112 0" stroke="#f8c6ae" stroke-width="9"/><path d="M86 77c-15-20 13-28 2-47M126 67c-15-20 13-28 2-47" stroke="#a34b3d" stroke-width="6" stroke-linecap="round"/></svg>'},{title:'Build your bowl',amount:'1 bowl',words:'Rice first. Add salmon and cucumber in separate sections. Spoon sauce on the side.',cue:'Keeping components separate preserves texture and lets you control each bite.',detail:'If mixed textures are preferred, the alternate visual would show everything tossed together.',svg:'<svg viewBox="0 0 400 250"><path d="M65 84h270c-13 97-63 132-135 132S78 181 65 84Z" fill="#f8f2df" stroke="#17211d" stroke-width="5"/><path d="M77 94c31-30 85-34 121 1-15 35-74 50-121-1Z" fill="#fff"/><path d="M204 97c40-34 89-19 119 0-15 39-73 54-119 0Z" fill="#ee8d74"/><circle cx="171" cy="147" r="23" fill="#77a878"/><circle cx="214" cy="164" r="21" fill="#77a878"/></svg>'},{title:'Save what worked',amount:'10-second check-in',words:'Tap liked, okay, or not for me. Add a note only if you want.',cue:'Your real experience improves the next recipe draw. No rating is required.',detail:'Optional fields include texture, actual time, cleanup, substitutions, household reaction, and more like this.',svg:'<svg viewBox="0 0 400 250"><rect x="64" y="40" width="272" height="174" rx="24" fill="#fffdf7" stroke="#17211d" stroke-width="5"/><path d="M107 92h186M107 130h124M107 168h155" stroke="#245b46" stroke-width="13" stroke-linecap="round"/><circle cx="298" cy="168" r="24" fill="#f2c85a"/><path d="m286 168 8 8 17-19" stroke="#17211d" stroke-width="6" fill="none"/></svg>'}];let i=1;const $=s=>document.querySelector(s);function render(){const s=steps[i];$('#visual').innerHTML='<span class="label">What this looks like</span>'+s.svg;$('#title').textContent=s.title;$('#amount').textContent=s.amount;$('#words').textContent=s.words;$('#cue').innerHTML='<b>How you know you are done</b>'+s.cue;$('#detail').textContent=s.detail;$('#state').textContent=`Step ${i+1} of ${steps.length} · ${['Gather','Prep','Cook','Finish','Remember'][i]} phase`;$('#prev').disabled=i===0;$('#next').textContent=i===steps.length-1?'Finish recipe':'Done — next picture';document.querySelectorAll('.phase').forEach((x,n)=>{x.className='phase '+(n<i?'done':n===i?'now':'')})}$('#next').onclick=()=>{if(i<steps.length-1){i++;render();scrollTo({top:0,behavior:'smooth'})}else location.href='../../'};$('#prev').onclick=()=>{if(i){i--;render()}};$('#interrupt').onclick=()=>{$('#resumeText').textContent=`You were on “${steps[i].title}.” Nothing else has been marked complete.`;$('#notice').classList.add('show')};$('#return').onclick=()=>$('#notice').classList.remove('show');$('#quiet').onclick=()=>{speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(`${steps[i].title}. ${steps[i].words}. ${steps[i].cue}`))};render();</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#10251f">
+  <title>Visual Cook</title>
+  <style>
+    :root{--paper:#f3f0e7;--panel:#fffdf7;--ink:#17211d;--muted:#66726c;--line:#cec8b9;--leaf:#245b46;--leaf-soft:#dce7de;--sun:#f2c85a;--brick:#a34b3d;--brick-soft:#f3dfdb}
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,#ece5d7 0,#f3f0e7 34%,#f8f5ee 100%);color:var(--ink);font-family:"Avenir Next","Segoe UI",sans-serif}
+    button,a,textarea{font:inherit}
+    .shell{max-width:620px;margin:auto;padding:18px 14px 120px}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .close,.quiet{min-height:44px;border:1px solid var(--line);border-radius:12px;background:transparent;font-weight:800;padding:0 13px}
+    .eyebrow,.tiny{font:800 10px ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--leaf)}
+    h1{font:600 29px/1.04 Georgia,serif;margin:8px 0 4px}
+    .sub,.intro p,.cue,.mini p,.completion label,.completion textarea,.choice-row button,.fallback p{font-size:13px;line-height:1.45}
+    .sub{color:var(--muted)}
+    .banner,.visual,.mini,.completion,.fallback{background:rgba(255,253,247,.92);border:1px solid var(--line);border-radius:18px}
+    .banner{margin-top:14px;padding:13px}
+    .banner strong{display:block;margin-bottom:6px}
+    .intro{margin-top:14px;padding:15px;border-radius:20px;background:var(--leaf-soft);border:1px solid #b8c9bc}
+    .intro h2,.completion h2,.fallback h2{font:600 24px/1.05 Georgia,serif;margin:0 0 7px}
+    .intro p,.fallback p{margin:0;color:#46524c}
+    .utility-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+    .utility-row button{min-height:44px;border-radius:12px;border:1px solid var(--line);background:var(--panel);font-weight:850}
+    .phases{display:flex;gap:5px;margin:17px 0 6px}
+    .phase{height:7px;flex:1;background:#d9d4c8;border-radius:8px}
+    .phase.done{background:var(--leaf)}
+    .phase.now{background:var(--sun)}
+    .map{display:flex;justify-content:space-between;font:700 10px ui-monospace,monospace;color:var(--muted)}
+    .visual{margin-top:16px;overflow:hidden}
+    .canvas{background:var(--leaf-soft);border-bottom:1px solid #bfd0c3;height:272px;display:grid;place-items:center;position:relative}
+    .canvas svg{width:88%;height:88%}
+    .label{position:absolute;top:13px;left:13px;background:var(--sun);padding:7px 9px;font:800 10px ui-monospace,monospace;text-transform:uppercase;transform:rotate(-1.5deg)}
+    .step{padding:16px}
+    .step h2{font:600 30px/1.05 Georgia,serif;margin:4px 0 8px}
+    .amount{display:inline-block;background:#fff;border:1px solid var(--line);padding:8px 10px;border-radius:10px;font-weight:900;margin:0 0 10px}
+    .step p{font-size:15px;line-height:1.48;color:#46524c;margin:0}
+    .cue{margin-top:14px;background:#eee4d5;border-left:4px solid var(--brick);padding:12px}
+    .cue b{display:block;color:var(--brick);margin-bottom:3px}
+    .mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+    .mini{padding:10px}
+    .mini b{display:block;margin-bottom:6px}
+    .mini p{margin:0;color:var(--muted)}
+    .tools{margin-top:14px;padding:0 15px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+    .tools summary{min-height:48px;display:flex;align-items:center;font-weight:850}
+    .tools p{margin:0 0 14px;color:var(--muted);font-size:13px;line-height:1.45}
+    .fallback{padding:15px;margin-top:16px}
+    .completion{display:none;margin-top:16px;padding:15px}
+    .completion.show{display:block}
+    .choice-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:8px 0 14px}
+    .choice-row.two{grid-template-columns:repeat(2,1fr)}
+    .choice-row button{min-height:44px;border:1px solid var(--line);border-radius:11px;background:#fff;font-weight:850}
+    .choice-row button.active{background:var(--ink);border-color:var(--ink);color:#fff}
+    .completion textarea{width:100%;min-height:88px;border:1px solid var(--line);border-radius:11px;padding:10px;background:#fff}
+    .save-memory{margin-top:12px;width:100%;min-height:50px;border:0;border-radius:13px;background:var(--leaf);color:#fff;font-weight:900}
+    .nav{position:fixed;bottom:0;left:0;right:0;background:#f3f0e7ec;border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;backdrop-filter:blur(10px)}
+    .nav button,.nav a{min-height:54px;border-radius:14px;font-weight:900}
+    .prev{width:78px;border:1px solid var(--line);background:var(--panel)}
+    .next{flex:1;border:0;background:var(--leaf);color:#fff}
+    .drawer{position:fixed;inset:0;background:#101914d9;display:none;place-items:end;padding:14px}
+    .drawer.show{display:grid}
+    .drawer-card{width:100%;max-width:620px;background:var(--panel);border-radius:22px 22px 0 0;padding:18px}
+    .drawer-card h3{font:600 25px Georgia,serif;margin:0 0 7px}
+    .drawer-card p{margin:0 0 12px;color:var(--muted);font-size:14px;line-height:1.45}
+    .stack{display:grid;gap:8px}
+    .stack button,.stack a{min-height:48px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:850;padding:0 14px;text-decoration:none;color:var(--ink);display:flex;align-items:center;justify-content:center}
+    .stack .primary{background:var(--leaf);border-color:var(--leaf);color:#fff}
+    .stack .warning{background:var(--brick-soft);border-color:#d9b4aa}
+    .resume-chip{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;background:#eee4d5;font-size:12px;color:#5b5143}
+    .feel{margin-top:12px;padding:0 12px;border:1px solid var(--line);border-radius:16px;background:rgba(255,253,247,.82)}
+    .feel summary{min-height:48px;display:flex;justify-content:space-between;gap:12px;align-items:center;cursor:pointer}.feel summary strong{font:600 17px Georgia,serif}.feel summary span{font-size:11px;color:var(--muted);text-align:right}.feel-body{padding:0 0 12px}
+    .feel-row{display:flex;gap:6px;overflow:auto;padding-bottom:4px}.feel-row button,.sensory button{min-height:42px;border:1px solid var(--line);border-radius:999px;background:#fff;font-weight:800;padding:0 12px;white-space:nowrap}.feel-row button.active{background:var(--ink);border-color:var(--ink);color:#fff}
+    .sensory{display:flex;gap:7px;margin-top:8px}.sensory button{flex:1;border-radius:11px}
+    .celebration{position:fixed;left:0;right:0;bottom:92px;display:grid;place-items:center;pointer-events:none;opacity:0;z-index:20}.celebration.step{left:auto;right:14px;display:block}.celebration.recipe{inset:0;bottom:auto}.celebration.show{animation:reward .7s ease-out}.celebration span{background:var(--sun);border:2px solid var(--ink);border-radius:14px;padding:9px 13px;font:600 16px Georgia,serif;transform:rotate(-2deg)}.celebration.recipe span{padding:18px 23px;border-radius:18px;font-size:27px}
+    body[data-feel="fast"] .canvas{height:205px}body[data-feel="fast"] .tools{display:none}body[data-feel="calm"]{background:var(--paper)}body[data-feel="playful"] .label{transform:rotate(-3deg) scale(1.04)}
+    @keyframes reward{0%{opacity:0;transform:scale(.82)}25%{opacity:1;transform:scale(1.05)}75%{opacity:1}100%{opacity:0;transform:translateY(-22px)}}
+    @media(prefers-reduced-motion:reduce){.celebration.show{animation:none;opacity:0}.canvas,.label{transition:none!important;transform:none!important}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="top">
+      <button class="close" onclick="location.href='../../tonight/'">‹ Tonight</button>
+      <button class="quiet" id="quiet">Read aloud</button>
+    </div>
+
+    <details class="feel" id="feelPanel">
+      <summary><strong>Cooking feel</strong><span id="feelSummary">Guided · sound off · motion on</span></summary>
+      <div class="feel-body">
+        <div class="feel-row" id="feelRow">
+          <button type="button" data-feel="fast">Fast</button><button type="button" data-feel="guided">Guided</button><button type="button" data-feel="playful">Playful</button><button type="button" data-feel="calm">Calm</button>
+        </div>
+        <div class="sensory"><button type="button" id="soundToggle">Sound: off</button><button type="button" id="motionToggle">Motion: on</button></div>
+      </div>
+    </details>
+
+    <div class="eyebrow" id="routeLabel">Visual Cook</div>
+    <h1 id="recipeTitle">Tonight’s recipe</h1>
+    <div class="sub" id="stateLine">Waiting for your cook plan.</div>
+
+    <section class="banner" id="resumeBanner" hidden>
+      <strong class="tiny">Saved state</strong>
+      <span id="resumeText"></span>
+    </section>
+
+    <section class="intro" id="introCard">
+      <div class="resume-chip" id="blockerSummary">0 on hand · 0 uncertain · 0 missing</div>
+      <h2 id="stepHeadline">One calm move at a time.</h2>
+      <p id="stepIntro">This cooking view follows the route you selected tonight and keeps your progress, blocker confirmations, and interruptions in one local plan.</p>
+      <div class="utility-row">
+        <button type="button" id="interruptOpen">I got interrupted</button>
+        <button type="button" id="cannotFinish">Cannot finish tonight</button>
+      </div>
+    </section>
+
+    <div class="phases">
+      <i class="phase"></i><i class="phase"></i><i class="phase"></i><i class="phase"></i>
+    </div>
+    <div class="map"><span>Gather</span><span>Prep</span><span>Cook</span><span>Finish</span></div>
+
+    <section class="visual">
+      <div class="canvas" id="visual">
+        <span class="label">What this looks like</span>
+      </div>
+      <div class="step">
+        <div class="tiny" id="stepNo">One thing now</div>
+        <h2 id="stepTitle">Choose a recipe</h2>
+        <div class="amount" id="stepAmount">No active plan</div>
+        <p id="stepWords">Return to Tonight Mode to choose a recipe and confirm the blockers you still care about tonight.</p>
+        <div class="cue" id="cueBox"><b>How you know you are done</b><span id="cueText">Nothing is in motion yet.</span></div>
+        <div class="mini-grid">
+          <div class="mini"><b>Route</b><p id="routeMini">Planned</p></div>
+          <div class="mini"><b>Tools</b><p id="toolMini">None yet</p></div>
+          <div class="mini"><b>Cleanup</b><p id="cleanupMini">Not started</p></div>
+        </div>
+        <details class="tools">
+          <summary>What is being saved?</summary>
+          <p id="savedDetail">The plan keeps route, step, status, blocker confirmations, and interruption state. It does not claim inventory was consumed.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="fallback" id="fallbackCard" hidden>
+      <div class="eyebrow">Minimal checklist</div>
+      <h2>Incomplete recipe memory</h2>
+      <p>This recipe does not have enough structured detail for a richer walkthrough, so Visual Cook stays explicit about what it knows. No temperatures, doneness cues, or timing guesses are invented here.</p>
+    </section>
+
+    <form class="completion" id="completionForm">
+      <div class="eyebrow">Dinner memory</div>
+      <h2>Save what actually happened.</h2>
+      <label>Actual effort</label>
+      <div class="choice-row" id="actualEffort">
+        <button type="button" data-value="open">Open + eat</button>
+        <button type="button" data-value="easy">Low effort</button>
+        <button type="button" data-value="cook">I can cook</button>
+      </div>
+      <label>Cleanup</label>
+      <div class="choice-row" id="cleanupChoice">
+        <button type="button" data-value="light">Light</button>
+        <button type="button" data-value="medium">Medium</button>
+        <button type="button" data-value="heavy">Heavy</button>
+      </div>
+      <label>Works on a low-capacity day?</label>
+      <div class="choice-row two" id="lowCapacity">
+        <button type="button" data-value="yes">Yes</button>
+        <button type="button" data-value="no">No</button>
+      </div>
+      <label for="note">Optional note</label>
+      <textarea id="note" placeholder="What changed, what helped, what you would keep next time."></textarea>
+      <button class="save-memory" type="submit">Save completion memory</button>
+    </form>
+  </main>
+
+  <nav class="nav">
+    <button class="prev" id="prev">Back</button>
+    <button class="next" id="next">Done with this step</button>
+  </nav>
+
+  <section class="drawer" id="interruptDrawer">
+    <div class="drawer-card">
+      <div class="eyebrow">Interrupted</div>
+      <h3>Pick the safest pause.</h3>
+      <p>Your current step, route, and blocker confirmations will stay exactly as they are.</p>
+      <div class="stack">
+        <button class="primary" id="pauseHere" type="button">Pause here</button>
+        <button id="safeExitOpen" type="button">Cannot finish tonight</button>
+        <button id="resumeNow" type="button">Keep cooking</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="drawer" id="safeExitDrawer">
+    <div class="drawer-card">
+      <div class="eyebrow">Safe exit</div>
+      <h3>Leave the plan honestly.</h3>
+      <p>Choose the exit that matches what you can do. Nothing here auto-marks ingredients as used or consumed.</p>
+      <div class="stack">
+        <button class="primary" data-exit="save_components" type="button">Save components for later</button>
+        <button data-exit="refrigerate" type="button">Refrigerate where appropriate</button>
+        <button data-exit="fallback_meal" type="button">Switch to a fallback meal</button>
+        <button class="warning" data-exit="abandon" type="button">Abandon this plan</button>
+        <a href="../../tonight/" id="safeExitLeave">Back to Tonight Mode</a>
+      </div>
+    </div>
+  </section>
+  <div class="celebration" id="celebration" aria-hidden="true"><span id="celebrationText">Step banked</span></div>
+
+  <script>
+    const TONIGHT_KEY = 'body-tonight-mode-v1';
+    const COOK_PLAN_KEY = 'body-cook-plan-v1';
+    const FEEL_KEY = 'body-cooking-feel-v1';
+    const params = new URLSearchParams(location.search);
+    const requestedId = Number(params.get('recipe')) || null;
+    const requestedRoute = params.get('route');
+    let routeParamApplied = false;
+    const recipeSteps = {
+      'crispy salmon rice bowl':{
+        planned:{
+          tools:'1 pan, 1 bowl, knife, spoon',
+          cleanup:'medium',
+          steps:[
+            {key:'gather',phase:'Gather',title:'Put the bowl pieces within reach',amount:'Rice, salmon, cucumber, sauce, topping',words:'Set out the main pieces first so you do not have to search once the pan is hot.',cue:'You can point to each part without opening every package yet.',detail:'This route keeps the recipe intact and front-loads the searching.',svg:'<svg viewBox="0 0 400 250"><rect x="32" y="146" width="336" height="34" rx="17" fill="#245b46"/><circle cx="88" cy="110" r="36" fill="#f2c85a"/><rect x="141" y="74" width="74" height="68" rx="16" fill="#ed8b72"/><path d="M244 138c9-56 38-76 71-62 14 35-11 67-71 62Z" fill="#77a878"/><rect x="322" y="90" width="30" height="55" rx="9" fill="#a34b3d"/></svg>'},
+            {key:'prep_cucumber',phase:'Prep',title:'Slice the cucumber',amount:'About half a cucumber',words:'Cut thick half-moons. Uniform pieces are not required for this bowl to work.',cue:'Stop when the slices are easy to grab with a fork.',detail:'Keeping prep loose preserves energy for the pan step.',svg:'<svg viewBox="0 0 400 250"><rect x="35" y="42" width="330" height="166" rx="25" fill="#f8f2df" stroke="#245b46" stroke-width="4"/><rect x="70" y="110" width="148" height="48" rx="24" fill="#39795a"/><path d="M94 111v46M128 111v46M162 111v46M196 111v46" stroke="#b9d39b" stroke-width="6"/><path d="m273 55 68 68-17 17-68-68Z" fill="#a34b3d"/><path d="m256 72 68 68-18 18-68-68Z" fill="#d9ddd7"/></svg>'},
+            {key:'cook_salmon',phase:'Cook',title:'Cook the salmon the way you trust',amount:'1 fillet',words:'Use the pan method you already rely on, and stay with the recipe or package guidance you trust for safety.',cue:'Move on only when the salmon reaches the doneness guidance you are already using.',detail:'Visual Cook is not inventing temperature or doneness rules here.',svg:'<svg viewBox="0 0 400 250"><ellipse cx="200" cy="148" rx="151" ry="69" fill="#17211d"/><ellipse cx="200" cy="139" rx="125" ry="48" fill="#43554c"/><path d="M125 128c36-52 111-52 150 0-29 44-118 44-150 0Z" fill="#ee8d74"/></svg>'},
+            {key:'build',phase:'Finish',title:'Build the bowl in sections',amount:'1 bowl',words:'Rice first, then salmon and cucumber in separate sections. Keep the sauce on the side until you taste it.',cue:'The bowl is done when every part is easy to see and easy to reach.',detail:'This helps texture stay intact and makes the bowl easier to adjust.',svg:'<svg viewBox="0 0 400 250"><path d="M65 84h270c-13 97-63 132-135 132S78 181 65 84Z" fill="#f8f2df" stroke="#17211d" stroke-width="5"/><path d="M77 94c31-30 85-34 121 1-15 35-74 50-121-1Z" fill="#fff"/><path d="M204 97c40-34 89-19 119 0-15 39-73 54-119 0Z" fill="#ee8d74"/></svg>'}
+          ]
+        },
+        easier:{
+          tools:'1 bowl, spoon, optional scissors',
+          cleanup:'light',
+          steps:[
+            {key:'gather',phase:'Gather',title:'Pull the shortcut pieces together',amount:'Rice, salmon, sauce, topping',words:'Use ready rice or leftover rice, and keep the sauce and crunch nearby.',cue:'Everything you need is within arm’s reach.',detail:'This route trims steps, tools, and cleanup.',svg:'<svg viewBox="0 0 400 250"><rect x="50" y="84" width="96" height="92" rx="18" fill="#fff"/><rect x="160" y="104" width="84" height="62" rx="18" fill="#ed8b72"/><rect x="264" y="80" width="68" height="92" rx="18" fill="#245b46"/></svg>'},
+            {key:'warm_base',phase:'Prep',title:'Warm the base with the least motion',amount:'1 bowl',words:'Heat the rice in the serving bowl if that works for your setup, then add the salmon in bite-size pieces.',cue:'The bowl is warm enough that you do not need a second vessel.',detail:'One container is the point of the easier route.',svg:'<svg viewBox="0 0 400 250"><circle cx="200" cy="138" r="86" fill="#f8f2df" stroke="#17211d" stroke-width="5"/><path d="M126 139c18-22 49-34 74-34 32 0 63 14 75 34-18 17-44 30-74 30s-57-13-75-30Z" fill="#fff"/></svg>'},
+            {key:'build',phase:'Finish',title:'Finish it as a simple bowl',amount:'1 bowl',words:'Add sauce and crunch only if they still feel worth it. Skip cucumber if the prep cost is too high tonight.',cue:'You have a complete bowl that matches the craving without extra cleanup.',detail:'This route intentionally removes garnish pressure.',svg:'<svg viewBox="0 0 400 250"><path d="M65 84h270c-13 97-63 132-135 132S78 181 65 84Z" fill="#f8f2df" stroke="#17211d" stroke-width="5"/><path d="M102 105h196c-12 40-52 61-98 61s-86-21-98-61Z" fill="#ed8b72"/></svg>'}
+          ]
+        }
+      },
+      'yogurt crunch bowl':{
+        planned:{
+          tools:'1 bowl, 1 spoon',
+          cleanup:'light',
+          steps:[
+            {key:'gather',phase:'Gather',title:'Set out the cold pieces',amount:'Yogurt, fruit, jam, crunch',words:'Put the bowl down first, then gather the toppings so you only make the decision once.',cue:'You can see every topping before you start scooping.',detail:'This recipe is intentionally minimal.',svg:'<svg viewBox="0 0 400 250"><rect x="60" y="88" width="88" height="88" rx="18" fill="#fff"/><circle cx="211" cy="131" r="38" fill="#f2c85a"/><rect x="266" y="84" width="70" height="96" rx="16" fill="#a34b3d"/></svg>'},
+            {key:'scoop',phase:'Prep',title:'Scoop the yogurt first',amount:'1 serving',words:'Build the base before choosing how sweet or crunchy you want the bowl tonight.',cue:'The bowl already works even if nothing else gets added.',detail:'This keeps the fallback strong if capacity drops.',svg:'<svg viewBox="0 0 400 250"><circle cx="200" cy="138" r="88" fill="#f8f2df" stroke="#17211d" stroke-width="5"/><path d="M130 138c0-33 30-58 70-58s70 25 70 58-30 33-70 33-70 0-70-33Z" fill="#fff"/></svg>'},
+            {key:'top',phase:'Finish',title:'Top it to the level that feels useful',amount:'Fruit, jam, crunch',words:'Add fruit, jam, and crunch in the order that makes the bowl easiest to eat.',cue:'Stop as soon as the bowl feels satisfying enough.',detail:'No extra flourishes are required.',svg:'<svg viewBox="0 0 400 250"><circle cx="200" cy="138" r="88" fill="#f8f2df" stroke="#17211d" stroke-width="5"/><circle cx="170" cy="118" r="18" fill="#a34b3d"/><circle cx="230" cy="150" r="16" fill="#f2c85a"/><circle cx="204" cy="111" r="10" fill="#245b46"/></svg>'}
+          ]
+        },
+        easier:{
+          tools:'1 bowl, 1 spoon',
+          cleanup:'light',
+          steps:[
+            {key:'gather',phase:'Gather',title:'Keep only the easiest toppings',amount:'Yogurt plus one or two extras',words:'Choose the shortest path to a bowl you will actually eat.',cue:'You have reduced the topping decision to something manageable.',detail:'The easier route removes all unnecessary choice.',svg:'<svg viewBox="0 0 400 250"><rect x="92" y="76" width="96" height="98" rx="18" fill="#fff"/><rect x="216" y="90" width="88" height="74" rx="18" fill="#a34b3d"/></svg>'},
+            {key:'scoop',phase:'Finish',title:'Build the bowl and stop early',amount:'1 serving',words:'Scoop the yogurt, add one sweet thing and one crunch if you want it, then stop.',cue:'The bowl is complete once it feels easy to eat immediately.',detail:'This keeps cleanup and decisions at the lightest setting.',svg:'<svg viewBox="0 0 400 250"><circle cx="200" cy="138" r="88" fill="#f8f2df" stroke="#17211d" stroke-width="5"/><path d="M130 138c0-33 30-58 70-58s70 25 70 58-30 33-70 33-70 0-70-33Z" fill="#fff"/><circle cx="214" cy="118" r="16" fill="#f2c85a"/></svg>'}
+          ]
+        }
+      },
+      'chicken scallion rice':{
+        planned:{
+          tools:'1 bowl, pan or microwave-safe dish, knife',
+          cleanup:'medium',
+          steps:[
+            {key:'gather',phase:'Gather',title:'Gather chicken, rice, and finishers',amount:'Chicken, rice, scallions, soy sauce, oil',words:'Set the warm base and the finishers out together before heating anything.',cue:'You can see the savory pieces and the green finishing step at once.',detail:'This is the fuller version of the bowl.',svg:'<svg viewBox="0 0 400 250"><rect x="50" y="90" width="92" height="84" rx="18" fill="#fff"/><rect x="160" y="106" width="84" height="62" rx="18" fill="#ed8b72"/><path d="M280 76h18v98h-18z" fill="#39795a"/><path d="M304 76h18v98h-18z" fill="#6ca768"/></svg>'},
+            {key:'warm',phase:'Cook',title:'Warm the chicken and rice',amount:'1 serving',words:'Use the heating method you already trust for your leftovers or cooked chicken.',cue:'The bowl base is warmed through according to the method you rely on.',detail:'Visual Cook stays out of invented reheating safety claims.',svg:'<svg viewBox="0 0 400 250"><circle cx="200" cy="138" r="88" fill="#f8f2df" stroke="#17211d" stroke-width="5"/><path d="M120 141h160c-12 22-45 40-80 40s-68-18-80-40Z" fill="#fff"/><path d="M130 126h140c-10 20-40 28-70 28s-60-8-70-28Z" fill="#ed8b72"/></svg>'},
+            {key:'finish',phase:'Finish',title:'Add scallions and sauce at the end',amount:'One final toss',words:'Top with scallions, soy sauce, and sesame oil only to the level that sounds good tonight.',cue:'Stop when the bowl smells savory and looks finished enough to eat.',detail:'Finishing at the end keeps the bowl flexible.',svg:'<svg viewBox="0 0 400 250"><circle cx="200" cy="138" r="88" fill="#f8f2df" stroke="#17211d" stroke-width="5"/><circle cx="176" cy="115" r="11" fill="#39795a"/><circle cx="215" cy="126" r="11" fill="#39795a"/><circle cx="236" cy="153" r="11" fill="#39795a"/></svg>'}
+          ]
+        },
+        easier:{
+          tools:'1 bowl, microwave-safe dish, spoon',
+          cleanup:'light',
+          steps:[
+            {key:'gather',phase:'Gather',title:'Keep it to the warm essentials',amount:'Chicken, rice, soy sauce',words:'Skip the extra finishers until the core bowl is already working.',cue:'You have enough for a complete warm bowl without chopping.',detail:'This route cuts prep and cleanup.',svg:'<svg viewBox="0 0 400 250"><rect x="88" y="84" width="98" height="88" rx="18" fill="#fff"/><rect x="214" y="104" width="96" height="62" rx="18" fill="#ed8b72"/></svg>'},
+            {key:'warm',phase:'Cook',title:'Warm everything in one vessel',amount:'1 bowl',words:'Use the microwave-safe bowl or dish so the heating step and the serving step stay the same.',cue:'The bowl is warm and ready to season without extra dishes.',detail:'One-vessel cooking is the main simplification.',svg:'<svg viewBox="0 0 400 250"><circle cx="200" cy="138" r="88" fill="#f8f2df" stroke="#17211d" stroke-width="5"/><path d="M123 136h154c-12 24-46 39-77 39s-65-15-77-39Z" fill="#ed8b72"/></svg>'},
+            {key:'finish',phase:'Finish',title:'Season only if it still helps',amount:'One drizzle or none',words:'Add soy sauce and stop there if that is enough. Scallions and sesame oil are optional tonight.',cue:'The bowl feels complete without asking for another tool.',detail:'The easier route protects momentum over polish.',svg:'<svg viewBox="0 0 400 250"><circle cx="200" cy="138" r="88" fill="#f8f2df" stroke="#17211d" stroke-width="5"/><path d="M142 108h116c12 17 15 33 8 49H134c-7-16-4-32 8-49Z" fill="#ed8b72"/></svg>'}
+          ]
+        }
+      }
+    };
+
+    let actualEffortChoice = null;
+    let cleanupChoice = null;
+    let lowCapacityChoice = null;
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let feel = loadFeel();
+
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => [...document.querySelectorAll(selector)];
+
+    function loadFeel(){
+      try{return {...{preset:'guided',sound:false,motion:true},...JSON.parse(localStorage.getItem(FEEL_KEY)||'{}')}}catch{return {preset:'guided',sound:false,motion:true}}
+    }
+
+    function saveFeel(){localStorage.setItem(FEEL_KEY,JSON.stringify(feel))}
+
+    function applyFeel(){
+      document.body.dataset.feel=feel.preset;
+      $$('#feelRow button').forEach(button=>button.classList.toggle('active',button.dataset.feel===feel.preset));
+      $('#soundToggle').textContent=`Sound: ${feel.sound?'on':'off'}`;
+      $('#motionToggle').textContent=`Motion: ${feel.motion&&!reducedMotion?'on':'off'}`;
+      $('#motionToggle').disabled=reducedMotion;
+      $('#feelSummary').textContent=`${feel.preset[0].toUpperCase()+feel.preset.slice(1)} · sound ${feel.sound?'on':'off'} · motion ${feel.motion&&!reducedMotion?'on':'off'}`;
+    }
+
+    function setPreset(preset){
+      const presets={fast:{sound:false,motion:false},guided:{sound:false,motion:true},playful:{sound:true,motion:true},calm:{sound:false,motion:false}};
+      feel={preset,...presets[preset]};saveFeel();applyFeel();$('#feelPanel').open=false;
+    }
+
+    function playTone(kind){
+      if(!feel.sound)return;
+      try{const Context=window.AudioContext||window.webkitAudioContext;const ctx=new Context();const osc=ctx.createOscillator();const gain=ctx.createGain();osc.type='sine';osc.frequency.value=kind==='recipe'?659:523;gain.gain.setValueAtTime(.0001,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(.075,ctx.currentTime+.02);gain.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+(kind==='recipe'?.42:.22));osc.connect(gain).connect(ctx.destination);osc.start();osc.stop(ctx.currentTime+(kind==='recipe'?.45:.25));osc.onended=()=>ctx.close()}catch{}
+    }
+
+    function reward(kind){
+      playTone(kind);
+      if(!feel.motion||reducedMotion)return;
+      $('#celebrationText').textContent=kind==='recipe'?'Dinner path cleared':'Step banked';
+      const node=$('#celebration');node.className=`celebration ${kind}`;void node.offsetWidth;node.classList.add('show');
+    }
+
+    function loadTonight(){
+      return JSON.parse(localStorage.getItem(TONIGHT_KEY) || '{"history":[]}');
+    }
+
+    function saveTonight(data){
+      localStorage.setItem(TONIGHT_KEY, JSON.stringify(data));
+    }
+
+    function loadPlan(){
+      return JSON.parse(localStorage.getItem(COOK_PLAN_KEY) || 'null');
+    }
+
+    function savePlan(plan){
+      localStorage.setItem(COOK_PLAN_KEY, JSON.stringify(plan));
+    }
+
+    function clearPlan(){
+      localStorage.removeItem(COOK_PLAN_KEY);
+    }
+
+    function normalize(value){
+      return String(value || '').trim().toLowerCase();
+    }
+
+    function labelEffort(value){
+      return value === 'open' ? 'Open + eat' : value === 'easy' ? 'Low effort' : 'I can cook';
+    }
+
+    function labelRoute(value){
+      return value === 'make_it_easier' ? 'Make it easier' : 'Cook as planned';
+    }
+
+    function planStateLabel(value){
+      if(value === 'paused') return 'Paused';
+      if(value === 'finishing') return 'Ready to save memory';
+      if(value === 'cooking') return 'Cooking';
+      return 'Ready';
+    }
+
+    function clone(data){
+      return JSON.parse(JSON.stringify(data));
+    }
+
+    function summarizeStates(ingredients){
+      return ingredients.reduce((acc, item) => {
+        if(item.state === 'on_hand') acc.on += 1;
+        else if(item.state === 'missing') acc.missing += 1;
+        else acc.uncertain += 1;
+        return acc;
+      }, {on:0, uncertain:0, missing:0});
+    }
+
+    function stepLibrary(plan){
+      const key = normalize(plan?.recipe?.title);
+      const library = recipeSteps[key];
+      if(library) return library;
+      return {
+        planned:{
+          tools:'Only the tools you already know you need',
+          cleanup:'unknown',
+          fallback:true,
+          steps:[
+            {key:'review',phase:'Gather',title:'Review the saved recipe before touching heat',amount:'1 quick check',words:'Read the original recipe or note you saved so you can see what is actually specified and what is still missing.',cue:'You know which ingredients and actions are clearly described in your source.',detail:'This is a minimal checklist because the recipe memory is incomplete.',svg:'<svg viewBox="0 0 400 250"><rect x="88" y="42" width="224" height="166" rx="22" fill="#fffdf7" stroke="#17211d" stroke-width="5"/><path d="M122 90h156M122 128h132M122 166h110" stroke="#245b46" stroke-width="12" stroke-linecap="round"/></svg>'},
+            {key:'gather_known',phase:'Prep',title:'Gather only the ingredients you can verify',amount:'Known items only',words:'Lay out the ingredients and equipment you know belong in this recipe. Leave unknowns flagged instead of guessing.',cue:'Everything in front of you is something the saved recipe actually supports.',detail:'No invented substitutions or missing process steps are being added here.',svg:'<svg viewBox="0 0 400 250"><rect x="52" y="86" width="84" height="86" rx="18" fill="#fff"/><rect x="158" y="102" width="84" height="62" rx="18" fill="#f2c85a"/><rect x="264" y="80" width="84" height="92" rx="18" fill="#245b46"/></svg>'},
+            {key:'finish_known',phase:'Finish',title:'Cook only by trusted instructions',amount:'Minimal checklist',words:'Follow the source you saved for any temperature, doneness, or timing guidance. If that source is incomplete, stop and choose the safest fallback for tonight.',cue:'The recipe only moves forward when you have trusted instructions for the next action.',detail:'This is intentionally sparse rather than misleading.',svg:'<svg viewBox="0 0 400 250"><circle cx="200" cy="138" r="88" fill="#f8f2df" stroke="#17211d" stroke-width="5"/><path d="M140 140h120" stroke="#a34b3d" stroke-width="12" stroke-linecap="round"/></svg>'}
+          ]
+        },
+        easier:{
+          tools:'Fewest possible tools',
+          cleanup:'unknown',
+          fallback:true,
+          steps:[
+            {key:'review',phase:'Gather',title:'Find the shortest safe version of the recipe',amount:'1 quick pass',words:'Use only the parts of the saved recipe that are clearly described, and skip any extras that depend on missing details.',cue:'You can name a simpler version without filling in unknown instructions.',detail:'This route still avoids invented temperatures or doneness cues.',svg:'<svg viewBox="0 0 400 250"><rect x="88" y="42" width="224" height="166" rx="22" fill="#fffdf7" stroke="#17211d" stroke-width="5"/><path d="M122 90h156M122 128h94" stroke="#245b46" stroke-width="12" stroke-linecap="round"/></svg>'},
+            {key:'gather_known',phase:'Finish',title:'Build the easiest trustworthy version',amount:'Minimal checklist',words:'Use the simplest tools and the most direct assembly or heating path you already trust from the original source.',cue:'The meal is honest about what is known and what is intentionally omitted.',detail:'This route is deliberately conservative for incomplete recipes.',svg:'<svg viewBox="0 0 400 250"><circle cx="200" cy="138" r="88" fill="#f8f2df" stroke="#17211d" stroke-width="5"/><path d="M132 126h136c-10 28-37 44-68 44s-58-16-68-44Z" fill="#f2c85a"/></svg>'}
+          ]
+        }
+      };
+    }
+
+    function activeSteps(plan){
+      const library = stepLibrary(plan);
+      const bucket = plan.route === 'make_it_easier' ? library.easier : library.planned;
+      return {
+        fallback:Boolean(bucket.fallback),
+        tools:bucket.tools,
+        cleanup:bucket.cleanup,
+        steps:bucket.steps
+      };
+    }
+
+    function ensurePlan(){
+      const plan = loadPlan();
+      if(!plan) return null;
+      if(requestedId && Number(plan.recipe.id) !== requestedId) return null;
+      if(requestedRoute && !routeParamApplied && plan.route !== requestedRoute){
+        plan.route = requestedRoute;
+      }
+      routeParamApplied = true;
+      if(!Array.isArray(plan.completedStepKeys)) plan.completedStepKeys = [];
+      if(!plan.status || plan.status === 'ready') plan.status = 'cooking';
+      if(typeof plan.stepIndex !== 'number') plan.stepIndex = 0;
+      savePlan(plan);
+      return plan;
+    }
+
+    function updatePlan(mutator){
+      const current = ensurePlan();
+      if(!current) return null;
+      const next = mutator(clone(current)) || current;
+      next.updatedAt = new Date().toISOString();
+      savePlan(next);
+      return next;
+    }
+
+    function syncChoiceRow(selector, value){
+      $$(selector + ' button').forEach((button) => {
+        button.classList.toggle('active', button.dataset.value === value);
+      });
+    }
+
+    function routeNarrative(plan, bundle){
+      if(plan.route === 'make_it_easier'){
+        return `This easier route is active. Remaining actions now target ${bundle.tools.toLowerCase()} and ${bundle.cleanup} cleanup while keeping anything you already finished checked off.`;
+      }
+      return `This planned route keeps the fuller recipe shape. The plan is still only saving route, step, blocker confirmations, and pauses.`;
+    }
+
+    function render(){
+      const plan = ensurePlan();
+      if(!plan){
+        $('#recipeTitle').textContent = 'Tonight’s recipe';
+        $('#stateLine').textContent = 'No active cook plan. Return to Tonight Mode to choose a meal.';
+        $('#resumeBanner').hidden = true;
+        $('#next').textContent = 'Back to Tonight';
+        $('#next').onclick = () => location.href = '../../tonight/';
+        $('#prev').disabled = true;
+        return;
+      }
+
+      const bundle = activeSteps(plan);
+      const steps = bundle.steps;
+      const step = steps[Math.min(plan.stepIndex, steps.length - 1)];
+      const states = summarizeStates(plan.ingredients || []);
+
+      $('#routeLabel').textContent = `Visual Cook · ${labelRoute(plan.route)}`;
+      $('#recipeTitle').textContent = plan.recipe.title;
+      $('#stateLine').textContent = `Step ${Math.min(plan.stepIndex + 1, steps.length)} of ${steps.length} · ${step.phase} · ${planStateLabel(plan.status)}`;
+      $('#blockerSummary').textContent = `${states.on} on hand · ${states.uncertain} uncertain · ${states.missing} missing`;
+      $('#stepHeadline').textContent = step.phase === 'Finish' ? 'Finish without losing the thread.' : 'One calm move at a time.';
+      $('#stepIntro').textContent = routeNarrative(plan, bundle);
+
+      if(plan.pauseState){
+        const exitDetail = plan.pauseState.safeExit ? ` Safe exit: ${plan.pauseState.safeExit.replaceAll('_', ' ')}.` : '';
+        $('#resumeText').textContent = `Saved on step ${plan.stepIndex + 1} with ${labelRoute(plan.route).toLowerCase()} active.${exitDetail}`;
+        $('#resumeBanner').hidden = false;
+      } else {
+        $('#resumeBanner').hidden = true;
+      }
+
+      document.querySelectorAll('.phase').forEach((node, index) => {
+        const currentPhase = ['Gather','Prep','Cook','Finish'].indexOf(step.phase);
+        node.className = 'phase ' + (index < currentPhase ? 'done' : index === currentPhase ? 'now' : '');
+      });
+
+      $('#visual').innerHTML = `<span class="label">What this looks like</span>${step.svg}`;
+      $('#stepNo').textContent = step.phase;
+      $('#stepTitle').textContent = step.title;
+      $('#stepAmount').textContent = step.amount;
+      $('#stepWords').textContent = step.words;
+      $('#cueText').textContent = step.cue;
+      $('#routeMini').textContent = labelRoute(plan.route);
+      $('#toolMini').textContent = bundle.tools;
+      $('#cleanupMini').textContent = bundle.cleanup;
+      $('#savedDetail').textContent = `${routeNarrative(plan, bundle)} Completed progress is tracked separately so switching routes does not erase finished steps.`;
+      $('#fallbackCard').hidden = !bundle.fallback;
+
+      $('#prev').disabled = plan.stepIndex === 0;
+      $('#next').textContent = plan.stepIndex >= steps.length - 1 ? 'Finish and save memory' : 'Done with this step';
+      $('#next').onclick = () => advanceStep(steps);
+      $('#prev').onclick = () => goBack(steps);
+    }
+
+    function advanceStep(steps){
+      const plan = updatePlan((current) => {
+        const bundle = activeSteps(current);
+        const step = bundle.steps[Math.min(current.stepIndex, bundle.steps.length - 1)];
+        current.completedStepKeys = [...new Set([...(current.completedStepKeys || []), step.key])];
+        if(current.stepIndex >= bundle.steps.length - 1){
+          current.status = 'finishing';
+        } else {
+          current.stepIndex += 1;
+          current.status = 'cooking';
+        }
+        current.pauseState = null;
+        return current;
+      });
+      if(plan && plan.status === 'finishing'){
+        reward('recipe');
+        $('#completionForm').classList.add('show');
+        $('#completionForm').scrollIntoView({behavior:feel.motion&&!reducedMotion?'smooth':'auto',block:'start'});
+      } else if(plan){
+        reward('step');
+      }
+      render();
+    }
+
+    function goBack(){
+      updatePlan((current) => {
+        current.stepIndex = Math.max(0, current.stepIndex - 1);
+        current.status = 'cooking';
+        current.pauseState = null;
+        return current;
+      });
+      render();
+    }
+
+    function switchRoute(){
+      const plan = updatePlan((current) => {
+        const before = activeSteps(current);
+        const completed = new Set(current.completedStepKeys || []);
+        const currentStep = before.steps[Math.min(current.stepIndex, before.steps.length - 1)];
+        completed.add(currentStep.key);
+        current.completedStepKeys = [...completed];
+        current.route = current.route === 'make_it_easier' ? 'cook_planned' : 'make_it_easier';
+        const after = activeSteps(current);
+        const nextIndex = after.steps.findIndex((step) => !completed.has(step.key));
+        current.stepIndex = nextIndex === -1 ? after.steps.length - 1 : nextIndex;
+        current.status = 'cooking';
+        current.pauseState = null;
+        return current;
+      });
+      render();
+      return plan;
+    }
+
+    function pausePlan(type, safeExit){
+      updatePlan((current) => {
+        current.status = 'paused';
+        current.pauseState = {type, safeExit:safeExit || null, savedAt:new Date().toISOString()};
+        return current;
+      });
+      render();
+    }
+
+    function saveCompletion(event){
+      event.preventDefault();
+      const plan = ensurePlan();
+      if(!plan) return;
+      if(!actualEffortChoice || !cleanupChoice || !lowCapacityChoice) return;
+      const tonight = loadTonight();
+      const history = tonight.history || [];
+      history.push({
+        recipeId:plan.recipe.id,
+        title:plan.recipe.title,
+        capacity:plan.capacity,
+        routeUsed:plan.route,
+        actualEffort:actualEffortChoice,
+        cleanup:cleanupChoice,
+        lowCapacityFit:lowCapacityChoice,
+        note:$('#note').value.trim(),
+        confirmations:clone(plan.confirmations || {}),
+        completedAt:new Date().toISOString()
+      });
+      saveTonight({...tonight, history, selectedId:null});
+      clearPlan();
+      location.href = '../../tonight/';
+    }
+
+    function attachChoices(){
+      $$('#actualEffort button').forEach((button) => {
+        button.addEventListener('click', () => {
+          actualEffortChoice = button.dataset.value;
+          syncChoiceRow('#actualEffort', actualEffortChoice);
+        });
+      });
+      $$('#cleanupChoice button').forEach((button) => {
+        button.addEventListener('click', () => {
+          cleanupChoice = button.dataset.value;
+          syncChoiceRow('#cleanupChoice', cleanupChoice);
+        });
+      });
+      $$('#lowCapacity button').forEach((button) => {
+        button.addEventListener('click', () => {
+          lowCapacityChoice = button.dataset.value;
+          syncChoiceRow('#lowCapacity', lowCapacityChoice);
+        });
+      });
+      $('#completionForm').addEventListener('submit', saveCompletion);
+    }
+
+    function attachDrawers(){
+      $('#quiet').addEventListener('click', () => {
+        const plan = ensurePlan();
+        if(!plan) return;
+        const step = activeSteps(plan).steps[Math.min(plan.stepIndex, activeSteps(plan).steps.length - 1)];
+        speechSynthesis.cancel();
+        speechSynthesis.speak(new SpeechSynthesisUtterance(`${step.title}. ${step.words}. ${step.cue}`));
+      });
+
+      $('#interruptOpen').addEventListener('click', () => {
+        $('#interruptDrawer').classList.add('show');
+      });
+
+      $('#cannotFinish').addEventListener('click', () => {
+        $('#safeExitDrawer').classList.add('show');
+      });
+
+      $('#pauseHere').addEventListener('click', () => {
+        pausePlan('interrupt');
+        $('#interruptDrawer').classList.remove('show');
+      });
+
+      $('#resumeNow').addEventListener('click', () => {
+        $('#interruptDrawer').classList.remove('show');
+      });
+
+      $('#safeExitOpen').addEventListener('click', () => {
+        $('#interruptDrawer').classList.remove('show');
+        $('#safeExitDrawer').classList.add('show');
+      });
+
+      $$('[data-exit]').forEach((button) => {
+        button.addEventListener('click', () => {
+          pausePlan('safe_exit', button.dataset.exit);
+          location.href = '../../tonight/';
+        });
+      });
+    }
+
+    function addRouteToggle(){
+      const button = document.createElement('button');
+      button.className = 'quiet';
+      button.id = 'routeToggle';
+      button.type = 'button';
+      button.textContent = 'Make it easier';
+      document.querySelector('.top').appendChild(button);
+      button.addEventListener('click', () => {
+        const plan = switchRoute();
+        if(plan){
+          button.textContent = plan.route === 'make_it_easier' ? 'Cook as planned' : 'Make it easier';
+        }
+      });
+    }
+
+    function init(){
+      applyFeel();
+      $$('#feelRow button').forEach(button=>button.addEventListener('click',()=>setPreset(button.dataset.feel)));
+      $('#soundToggle').addEventListener('click',()=>{feel.sound=!feel.sound;saveFeel();applyFeel();if(feel.sound)playTone('step')});
+      $('#motionToggle').addEventListener('click',()=>{if(reducedMotion)return;feel.motion=!feel.motion;saveFeel();applyFeel()});
+      addRouteToggle();
+      attachChoices();
+      attachDrawers();
+      render();
+      const plan = ensurePlan();
+      if(plan){
+        document.getElementById('routeToggle').textContent = plan.route === 'make_it_easier' ? 'Cook as planned' : 'Make it easier';
+        if(plan.status === 'finishing'){
+          $('#completionForm').classList.add('show');
+        }
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
