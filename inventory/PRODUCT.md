@@ -194,6 +194,12 @@ The cook plan is interruption-safe: route, step, status, confirmations, and paus
 
 Cooking Feel treats neurodivergent preference as adjustable dimensions rather than a diagnosis. `Fast`, `Guided`, `Playful`, and `Calm` are reversible presets backed by separate sound and motion controls; reduced-motion remains a hard override. Step and recipe completion may use brief non-blocking generated tones and visual celebrations, but never streak loss, guilt, random loot, or animations that delay the next action. Future onboarding should let people *experience* all four feels on the same tiny sample step, then begin from a craving or import—showing the product’s possibilities before asking for setup.
 
+## Recipe-first experiential onboarding
+
+`/inventory/start/` proves the Body Kitchen loop without a feature tour or inventory setup. A user can save a typed craving or source link as an honest Recipe Box stub, create a private screenshot draft whose optional Blob lives only in IndexedDB, or start with a fixed no-heat sample. No onboarding object duplicates recipe data, and no path fabricates extraction, ingredients, timing, or steps.
+
+The sample renders one yogurt-bowl action through `Guided`, `Fast`, `Playful`, and `Calm`; trying any two enables continuation, while skip remains available. The selected preset is written to the same `body-cooking-feel-v1` contract used by Visual Cook. `body-onboarding-v1` stores only progress, sampled modes, selected feel, and a pointer to a real recipe record. Resume restores the exact phase, completion hands off to Recipe Box or Tonight Mode, and replay never deletes or duplicates the saved desire.
+
 ### Phase 1: Private alpha
 Real image capture and review, backend sync, item editing, barcode lookup, expiry confidence, telemetry, 20–40 design partners.
 
