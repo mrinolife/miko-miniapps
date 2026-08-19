@@ -27,15 +27,12 @@ Marketing usually shows a clean, front-facing grocery haul. Real refrigerators r
 
 ## Body Kitchen capture flow
 
-### 1. Guided coverage
-The app asks for a small sequence rather than an undirected video:
-1. top and middle shelves
-2. lower shelf and drawers
-3. door shelves
-4. freezer
-5. optional leftovers close-up
+### 1. Quick scan is the default
+The opening path is one action: take one useful photo of the fridge or groceries and review what the app can see. No setup, zone selection, coverage checklist, or demand for completeness.
 
-A coverage map shows what is done. The user can stop after any step; partial capture remains useful.
+After recognition, the app may offer one optional follow-up such as “Add another angle?” when confidence or visible coverage is low. The user can ignore it and keep the partial inventory.
+
+A shelf-by-shelf **Deep scan** remains available for users who want completeness, initial kitchen setup, moving, or a periodic reset. It is never the default and never presented as required maintenance.
 
 ### 2. On-device quality gate
 Before upload:

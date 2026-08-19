@@ -9,8 +9,8 @@ Launch for adults with ADHD, autistic adults, burned-out caregivers, and anyone 
 The product is useful without diagnosis or disclosure. Accessibility appears in the interaction model: recognition over recall, low-decision defaults, interruption-safe drafts, forgiving estimates, variable-effort recipes, and no shame loops.
 
 ## Core loop
-1. **Capture:** point the camera at a fridge shelf, freezer drawer, grocery haul, barcode, or receipt. Voice and manual quick-add remain first-class.
-2. **Confirm:** the app presents a short review queue, grouped by confidence. One swipe accepts; uncertainty is visible.
+1. **Capture:** open directly to one quick photo of the fridge, groceries, barcode, or receipt. Partial is useful. Voice and manual quick-add remain first-class; an optional Deep scan handles users who want shelf-by-shelf completeness.
+2. **Confirm:** the app presents a short review queue, grouped by confidence. One swipe accepts; uncertainty is visible. It may offer one optional extra angle when the first image has poor coverage, never a required sweep.
 3. **Notice:** a use-first queue shows only the food that needs a decision soon.
 4. **Choose:** recipes rank by food urgency, current energy, time, equipment, sensory preferences, protein goal, and missing ingredients.
 5. **Resolve:** cooked, eaten, frozen, discarded, or “still here.” Inventory and waste learning update from that action.
