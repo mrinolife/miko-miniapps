@@ -32,8 +32,10 @@
       linear-gradient(120deg, transparent 0 46%, rgba(111,183,214,.04) 46% 47%, transparent 47% 100%),
       repeating-linear-gradient(135deg, rgba(199,169,106,.03) 0 2px, transparent 2px 18px)}
     .shell{max-width:760px;margin:0 auto;padding:16px 14px 34px;position:relative}
-    .hero,.panel{background:linear-gradient(180deg,rgba(29,22,39,.96),rgba(20,16,27,.96));border:1px solid var(--line);border-radius:24px;box-shadow:none;position:relative;overflow:hidden}
-    .hero::after,.panel::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.025),transparent 30%)}
+    .hero,.panel{background:linear-gradient(180deg,rgba(29,22,39,.97),rgba(20,16,27,.97));border:1px solid var(--line);border-radius:24px;box-shadow:none;position:relative;overflow:hidden}
+    .hero::after,.panel::after{content:"";position:absolute;inset:0;pointer-events:none;background:
+      linear-gradient(180deg,rgba(255,255,255,.03),transparent 30%),
+      repeating-linear-gradient(90deg, transparent 0 18px, rgba(217,107,79,.03) 18px 19px, transparent 19px 40px)}
     .hero{padding:18px 16px;border-color:var(--line-strong)}
     .eyebrow{font:800 12px/1.2 ui-monospace,monospace;color:var(--gold);text-transform:uppercase;letter-spacing:.12em}
     h1{margin:8px 0 6px;font-size:1.9rem;line-height:1;color:#fff5ea}
@@ -41,7 +43,7 @@
     .stack{display:grid;gap:14px;margin-top:14px}
     .panel{padding:14px}
     .section-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-end;margin-bottom:10px}
-    .section-title{font-size:1.05rem;font-weight:800}
+    .section-title{font-size:1.05rem;font-weight:800;letter-spacing:.01em}
     .section-note{font-size:.86rem;color:var(--muted)}
     .chips,.row{display:flex;gap:8px;flex-wrap:wrap}
     .chip,.choice,.mini,.ghost,.send,.navbtn{border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--text)}
@@ -52,6 +54,10 @@
     .progress-band{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:14px}
     .progress-band span{height:4px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(199,169,106,.12)}
     .progress-band span:nth-child(1){background:linear-gradient(90deg,var(--ember),var(--gold))}
+    .arc-strip{display:grid;grid-template-columns:1.2fr .9fr .9fr;gap:8px;margin-top:12px}
+    .arc-card{padding:10px 12px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,rgba(20,15,27,.92),rgba(33,26,43,.92))}
+    .arc-title{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+    .arc-copy{font-size:.84rem;color:var(--text)}
     .choice{min-height:54px;padding:12px 14px;font-weight:700;font-size:1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:1;min-width:0}
     .choice.active{background:linear-gradient(180deg,var(--wisteria),#5f48ae);border-color:#a08ae6;color:#fff}
     .choice.soft.active{background:linear-gradient(180deg,var(--cyan),#4a8cb0);border-color:#9ed6ec;color:#0c1418}
@@ -76,6 +82,8 @@
     .summary{white-space:pre-wrap;font:13px/1.45 ui-monospace,monospace;background:#100d15;border-radius:16px;border:1px solid var(--line);padding:12px;color:#f0e9ff}
     .step-kicker{font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
     .step-orbit{font-size:.8rem;color:var(--muted);padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03)}
+    .section-titleline{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+    .phase-tag{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan)}
     @media (max-width:520px){.scale{grid-template-columns:repeat(5,minmax(0,1fr))}.choice{font-size:.95rem}.time-display{font-size:1.5rem}}
   </style>
 </head>
@@ -84,29 +92,34 @@
     <section class="hero">
       <div class="hero-top">
         <div>
-          <div class="eyebrow">Miko Body · Dawn form</div>
+          <div class="eyebrow">Miko Body · Dawn form briefing</div>
           <h1>Morning check-in</h1>
-          <div class="sub">Low-light, sleepy-brain mode. Tap through, set your footing, send the pulse back.</div>
+          <div class="sub">Your dawn arc starts here. Read the gauges, clear the fog, lock the day plan, send the pulse back.</div>
         </div>
         <div class="sigil" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
       </div>
       <div class="chips" style="margin-top:12px">
-        <div class="chip">dark-room friendly</div>
-        <div class="chip">keeps your draft</div>
-        <div class="chip">one-thumb flow</div>
+        <div class="chip">night-mode readable</div>
+        <div class="chip">checkpoint save active</div>
+        <div class="chip">one-thumb combat UI</div>
       </div>
       <div class="progress-band" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+      <div class="arc-strip">
+        <div class="arc-card"><div class="arc-title">Recovery arc</div><div class="arc-copy">Sleep, grogginess, morning read.</div></div>
+        <div class="arc-card"><div class="arc-title">Focus form</div><div class="arc-copy">Energy, mood, lock-in.</div></div>
+        <div class="arc-card"><div class="arc-title">Day setup</div><div class="arc-copy">Star, caffeine, shift plan.</div></div>
+      </div>
     </section>
 
     <div id="step-wake" class="stack" style="margin-top:14px">
       <section class="panel">
         <div class="section-head">
           <div>
-            <div class="step-kicker">Phase one</div>
+            <div class="step-kicker">Opening scene</div>
             <div class="section-title">Wake time</div>
             <div class="section-note">Starts at right now. Nudge if the clock drifted.</div>
           </div>
-          <div class="step-orbit" id="wakeBadge">now</div>
+          <div class="step-orbit" id="wakeBadge">scene live</div>
         </div>
         <div class="timebox">
           <div class="time-display" id="wakeDisplay">--:--</div>
@@ -122,13 +135,15 @@
 
       <section class="panel">
         <div class="section-head">
-          <div class="step-kicker">Phase two</div>
-          <div class="section-title">How did sleep feel?</div>
+          <div>
+            <div class="step-kicker">Recovery arc</div>
+            <div class="section-title">How did sleep feel?</div>
+          </div>
           <div class="section-note">Quick reads only</div>
         </div>
         <div class="stack">
           <div>
-            <div class="section-note" style="margin-bottom:8px">Sleep quality</div>
+            <div class="section-note" style="margin-bottom:8px">Sleep quality gauge</div>
             <div class="scale" data-scale="sleep_quality">
               <button class="choice soft" data-value="1"><span class="scale-num">1</span><span class="scale-label">rough</span></button>
               <button class="choice soft" data-value="2"><span class="scale-num">2</span><span class="scale-label">bad</span></button>
@@ -138,7 +153,7 @@
             </div>
           </div>
           <div>
-            <div class="section-note" style="margin-bottom:8px">Grogginess</div>
+            <div class="section-note" style="margin-bottom:8px">Grogginess meter</div>
             <div class="scale" data-scale="grogginess">
               <button class="choice warn" data-value="1"><span class="scale-num">1</span><span class="scale-label">clear</span></button>
               <button class="choice warn" data-value="2"><span class="scale-num">2</span><span class="scale-label">light</span></button>
@@ -150,21 +165,21 @@
         </div>
       </section>
 
-      <div class="nav"><button class="navbtn" id="toState">Next: body state</button></div>
+      <div class="nav"><button class="navbtn" id="toState">Next: focus form</button></div>
     </div>
 
     <div id="step-state" class="stack hidden" style="margin-top:14px">
       <section class="panel">
         <div class="section-head">
           <div>
-            <div class="step-kicker">Phase three</div>
+            <div class="step-kicker">Focus form</div>
             <div class="section-title">Morning body state</div>
           </div>
-          <div class="section-note">Tap the vibe</div>
+          <div class="section-note">Read the gauges</div>
         </div>
         <div class="stack">
           <div>
-            <div class="section-note" style="margin-bottom:8px">Energy</div>
+            <div class="section-note" style="margin-bottom:8px">Energy gauge</div>
             <div class="scale" data-scale="energy">
               <button class="choice" data-value="1"><span class="scale-num">1</span><span class="scale-label">dead</span></button>
               <button class="choice" data-value="2"><span class="scale-num">2</span><span class="scale-label">low</span></button>
@@ -174,7 +189,7 @@
             </div>
           </div>
           <div>
-            <div class="section-note" style="margin-bottom:8px">Mood</div>
+            <div class="section-note" style="margin-bottom:8px">Mood aura</div>
             <div class="scale" data-scale="mood">
               <button class="choice" data-value="1"><span class="scale-num">1</span><span class="scale-label">grim</span></button>
               <button class="choice" data-value="2"><span class="scale-num">2</span><span class="scale-label">off</span></button>
@@ -184,7 +199,7 @@
             </div>
           </div>
           <div>
-            <div class="section-note" style="margin-bottom:8px">Focus</div>
+            <div class="section-note" style="margin-bottom:8px">Focus lock</div>
             <div class="scale" data-scale="focus">
               <button class="choice" data-value="1"><span class="scale-num">1</span><span class="scale-label">fog</span></button>
               <button class="choice" data-value="2"><span class="scale-num">2</span><span class="scale-label">scattered</span></button>
@@ -197,7 +212,7 @@
       </section>
       <div class="nav">
         <button class="navbtn" id="backToWake">Back</button>
-        <button class="navbtn" id="toPlan">Next: today setup</button>
+        <button class="navbtn" id="toPlan">Next: mission setup</button>
       </div>
     </div>
 
@@ -205,14 +220,14 @@
       <section class="panel">
         <div class="section-head">
           <div>
-            <div class="step-kicker">Phase four</div>
+            <div class="step-kicker">Mission setup</div>
             <div class="section-title">Today setup</div>
           </div>
-          <div class="section-note">Only the useful parts</div>
+          <div class="section-note">Load only what matters</div>
         </div>
         <div class="stack">
           <div>
-            <div class="section-note" style="margin-bottom:8px">Star so far?</div>
+            <div class="section-note" style="margin-bottom:8px">Star status</div>
             <div class="row" data-choice-group="star_taken">
               <button class="choice" data-value="not_yet">Not yet</button>
               <button class="choice" data-value="yes">Took it</button>
@@ -220,7 +235,7 @@
             </div>
           </div>
           <div>
-            <div class="section-note" style="margin-bottom:8px">Caffeine so far?</div>
+            <div class="section-note" style="margin-bottom:8px">Caffeine charge</div>
             <div class="row" data-choice-group="caffeine">
               <button class="choice" data-value="none">None</button>
               <button class="choice" data-value="some">Some</button>
@@ -228,7 +243,7 @@
             </div>
           </div>
           <div>
-            <div class="section-note" style="margin-bottom:8px">Work start / shift</div>
+            <div class="section-note" style="margin-bottom:8px">Shift timeline</div>
             <div class="row" data-choice-group="work_start">
               <button class="choice" data-value="off">Off day</button>
               <button class="choice" data-value="soon">Soon</button>
@@ -237,7 +252,7 @@
             </div>
           </div>
           <div>
-            <div class="section-note" style="margin-bottom:8px">Anything unusual?</div>
+            <div class="section-note" style="margin-bottom:8px">Battle conditions</div>
             <div class="row" data-choice-group="flags" data-multi="true">
               <button class="choice" data-value="poor_sleep">Poor sleep</button>
               <button class="choice" data-value="stress">Stress</button>
@@ -247,14 +262,14 @@
             </div>
           </div>
           <div>
-            <div class="section-note" style="margin-bottom:8px">Optional quick note</div>
-            <textarea id="note" class="input" placeholder="Only if something weird happened"></textarea>
+            <div class="section-note" style="margin-bottom:8px">Side note</div>
+            <textarea id="note" class="input" placeholder="Only if the episode got weird"></textarea>
           </div>
         </div>
       </section>
       <div class="nav">
         <button class="navbtn" id="backToState">Back</button>
-        <button class="navbtn" id="toReview">Preview</button>
+        <button class="navbtn" id="toReview">Preview episode card</button>
       </div>
     </div>
 
@@ -262,10 +277,10 @@
       <section class="panel">
         <div class="section-head">
           <div>
-            <div class="step-kicker">Final check</div>
+            <div class="step-kicker">Final frame</div>
             <div class="section-title">Ready to send</div>
           </div>
-          <div class="section-note">Tweak anything before it goes back</div>
+          <div class="section-note">Tweak anything before the pulse lands</div>
         </div>
         <div id="summary" class="summary"></div>
       </section>
@@ -276,7 +291,7 @@
     </div>
 
     <div class="footer">
-      <button class="send" id="sendBtn">Send the morning pulse to Miko</button>
+      <button class="send" id="sendBtn">Transmit dawn report to Miko</button>
       <button class="ghost hidden" id="copiedBtn">Copied summary</button>
     </div>
   </main>

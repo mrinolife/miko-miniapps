@@ -4,7 +4,7 @@
 Morning check-in for Telegram in a dark bedroom. One-handed, low-glare, fast to parse.
 
 ## Visual direction
-Demon Slayer-adjacent mood without copying branded assets: night ink, ember red, wisteria violet, muted gold, water-cyan accents. Feels like a stylized breathing-form HUD, not anime merch.
+Full stylized anime interface with check-in-relevant references: dawn patrol, breathing-form meter, recovery arc, focus gauge, sleepy boss-fight energy. Still original and not using copyrighted art. Feels like an anime HUD opening card, with clear chapter / phase language and dramatic copy tied to waking up, energy, focus, recovery, caffeine, and today's setup.
 
 ## Rules
 - Keep contrast high and avoid bright white flood.
@@ -12,6 +12,8 @@ Demon Slayer-adjacent mood without copying branded assets: night ink, ember red,
 - Use texture, borders, and glow sparingly. No heavy card shadows.
 - UI chrome uses text, lines, and simple shapes. No emoji as interface icons.
 - Add personality through copy and palette, while preserving fast scanning in the dark.
+- Lean into anime tropes in text: arc, form, pulse, gauge, recovery, fog, charge, phase.
+- Decorations should feel like title-card lines, aura bands, or motion trails.
 
 ## Palette
 - bg: #0b0a10
