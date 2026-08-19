@@ -4,7 +4,7 @@
 Morning check-in for Telegram in a dark bedroom. One-handed, low-glare, fast to parse.
 
 ## Visual direction
-Full stylized anime interface with check-in-relevant references: dawn patrol, breathing-form meter, recovery arc, focus gauge, sleepy boss-fight energy. Still original and not using copyrighted art. Feels like an anime HUD opening card, with clear chapter / phase language and dramatic copy tied to waking up, energy, focus, recovery, caffeine, and today's setup.
+Full stylized anime interface with actual visual motifs on-screen, not just themed words. Use original inline art and symbols: manga speed lines, blade-ring crest, eye/gaze emblem for focus, sleep moon crest, energy flame mark, water-sweep trails, wisteria petal shapes, chapter-card framing, and dramatic label plates. Feels like an anime opening card or mission HUD for the check-in itself.
 
 ## Rules
 - Keep contrast high and avoid bright white flood.
@@ -13,7 +13,7 @@ Full stylized anime interface with check-in-relevant references: dawn patrol, br
 - UI chrome uses text, lines, and simple shapes. No emoji as interface icons.
 - Add personality through copy and palette, while preserving fast scanning in the dark.
 - Lean into anime tropes in text: arc, form, pulse, gauge, recovery, fog, charge, phase.
-- Decorations should feel like title-card lines, aura bands, or motion trails.
+- Decorations should feel like title-card lines, aura bands, motion trails, crests, and tiny emblem art.
 
 ## Palette
 - bg: #0b0a10
