@@ -77,18 +77,63 @@ Canonical inventory stays in our database. Public datasets supply product metada
 - Full account export and deletion are available in-app.
 - No sale of household, food, health, or behavioral data.
 
-## Paid App Store model
+## Fair paid App Store model
 
-### Free
-One kitchen, manual/barcode capture, use-first queue, basic recipes, limited photo scans each month.
+### Principle
+Free solves the complete basic problem. Plus removes labor, coordinates households, and pays for ongoing AI/cloud work. Accessibility, food urgency, safety context, corrections, export, and deletion never sit behind the paywall.
 
-### Plus: proposed $5.99/month or $39.99/year
-Unlimited photo and receipt capture, household sharing, advanced rescue recipes, history, nutrition-aware ranking, home-screen widgets, and pantry sync across devices.
+### Free: a useful kitchen, indefinitely
+- One kitchen on one primary device
+- Unlimited manual and voice quick-add
+- Unlimited barcode lookup
+- Full fridge/freezer/pantry inventory
+- Use-first queue and expiry-source/confidence display
+- Basic effort-aware meal suggestions
+- Rescue Mode
+- Shopping list
+- Offline use, reminders, widgets, accessibility controls, and notification budget
+- Inventory corrections, undo, full export, and account deletion
+- A recurring allowance of guided AI capture **sessions**, counted per fridge/receipt session rather than per image; retries and quality-check failures never consume allowance
+- One optional household partner with basic shared inventory so couples do not have to pay merely to coordinate
 
-### Founding lifetime
-A limited early-adopter offer can finance inference costs and create a committed testing cohort. Do not promise lifetime cloud AI without a fair-use clause.
+Free users keep confirmed inventory after the AI allowance is used. They can continue entering, editing, resolving, and exporting food without interruption.
 
-Annual is the default highlighted plan. Subscription value comes from ongoing capture automation and household coordination, not locking the user’s own inventory behind payment.
+### Plus: proposed $4.99/month or $34.99/year
+- Generous high-volume photo and receipt recognition under a transparent fair-use policy
+- Automatic cross-photo merging and advanced receipt reconciliation
+- Multi-device sync and larger households
+- Shared assignments, holds, activity history, and duplicate-purchase warnings
+- Advanced preference learning and nutrition-aware ranking
+- Full inventory and waste-history insights
+- Recipe adaptation, batch rescue planning, and richer household meal coordination
+- Priority processing during high demand
+
+At $34.99, annual is about $2.92/month and 41.6% below twelve monthly payments. Test willingness to pay before launch rather than treating this as final pricing.
+
+### Avoid meter anxiety
+- Show the allowance before capture starts, in plain language.
+- Count one guided sweep as one session even when it contains several photos.
+- Never charge for blurry shots, upload failures, model failures, or retries.
+- Give a soft warning before the limit; never reveal a hard stop after the user has completed the work.
+- Keep a small emergency/rescue allowance so a free user can scan urgent groceries after reaching the normal cap.
+- Let unused allowance roll over modestly without creating a game-like balance users must manage.
+
+### Trial and billing ethics
+- Let people experience successful capture and review before showing the paywall.
+- Offer a seven-day Plus trial only after the user chooses a Plus feature.
+- State the exact renewal date and price on the trial screen and send an optional reminder before renewal.
+- No countdown timers, preselected annual plan, disguised close button, guilt copy, streak loss, or repeated full-screen paywalls.
+- Make downgrade and cancellation easy to find. A downgrade preserves all user data and converts the kitchen to free limits.
+- Honor Apple Family Sharing when unit economics permit.
+
+### Access program
+Provide renewable sponsored Plus access through creator codes and partner organizations for users facing financial hardship. Keep eligibility lightweight and private; do not require diagnostic paperwork. Students and disability/community partners can receive longer trials or discounted annual access. Measure abuse quietly without treating every user as suspicious.
+
+### Founding plan
+A limited founding purchase can finance development and create a committed testing cohort. It should promise lifetime access to the core paid software features, while unusually expensive third-party AI can remain subject to a clearly stated generous fair-use limit. Never advertise unlimited lifetime cloud inference.
+
+### What we do not monetize
+No advertisements, sponsored recipe ranking, grocery-brand placement disguised as advice, or sale of household, food, health, or behavioral data. Affiliate shopping links, if ever added, are optional, clearly labeled, and never alter the use-first ranking.
 
 ## App Store readiness
 - Native-feeling iOS app built with Expo React Native for product speed; native Swift modules for VisionKit, barcode scanning, widgets, share extensions, and App Intents as needed.
